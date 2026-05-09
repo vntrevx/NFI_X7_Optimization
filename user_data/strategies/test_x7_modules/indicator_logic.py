@@ -12,7 +12,6 @@ import time
 
 import numpy as np
 import pandas as pd
-import pandas_ta as pta
 import talib.abstract as ta
 from pandas import DataFrame
 
@@ -746,7 +745,7 @@ class TestX7IndicatorLogicMixin:
 
     # Global protections
     # -----------------------------------------------------------------------------------------
-    if not self.config["runmode"].value in ("live", "dry_run"):
+    if self.config["runmode"].value not in ("live", "dry_run"):
       # Backtest age filter
       df["bt_agefilter_ok"] = False
       df.loc[df.index > (12 * 24 * self.bt_min_age_days), "bt_agefilter_ok"] = True

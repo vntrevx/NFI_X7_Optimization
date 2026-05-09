@@ -2,12 +2,14 @@
 
 from __future__ import annotations
 
+import atexit
 from concurrent.futures import ProcessPoolExecutor
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import importlib
 import logging
 import multiprocessing
 import os
+import queue
 import sys
 import time
 import traceback
@@ -24,6 +26,7 @@ from test_x7_modules.cpu import recommended_indicator_cores, recommended_process
 
 log = logging.getLogger(__name__)
 _MIN_CALLBACK_RESULT_ROWS = 6
+_FALSE_VALUES = {"0", "false", "no", "off"}
 _NUMERIC_THREAD_ENV_VARS = (
   "NUMEXPR_NUM_THREADS",
   "OMP_NUM_THREADS",
@@ -253,6 +256,8 @@ class TestX7ParallelAnalyzeMixin:
   test_x7_stable_skip_unchanged_informative_env = "TEST_X7_STABLE_SKIP_UNCHANGED_INFORMATIVE"
   test_x7_stable_prewarm_dataframes_env = "TEST_X7_STABLE_PREWARM_DATAFRAMES"
   test_x7_stable_prewarm_compute_env = "TEST_X7_STABLE_PREWARM_COMPUTE"
+  test_x7_stable_response_timeout_env = "TEST_X7_STABLE_RESPONSE_TIMEOUT_SECONDS"
+  test_x7_stable_fallback_env = "TEST_X7_STABLE_FALLBACK_ON_FAILURE"
   test_x7_numeric_threads_env = "TEST_X7_NUMERIC_THREADS"
 
   def _test_x7_analyze_workers(self, pair_count: int) -> int:
@@ -333,6 +338,21 @@ class TestX7ParallelAnalyzeMixin:
       return env_value.strip().lower() in {"1", "true", "yes", "on"}
     return bool(self.config.get("test_x7_stable_prewarm_compute", False))
 
+  def _test_x7_stable_response_timeout_seconds(self) -> float:
+    env_value = os.getenv(self.test_x7_stable_response_timeout_env)
+    config_value = self.config.get("test_x7_stable_response_timeout_seconds", 300.0)
+    try:
+      timeout = float(env_value if env_value is not None else config_value)
+    except (TypeError, ValueError):
+      timeout = 300.0
+    return max(1.0, timeout)
+
+  def _test_x7_stable_fallback_enabled(self) -> bool:
+    env_value = os.getenv(self.test_x7_stable_fallback_env)
+    if env_value is not None:
+      return env_value.strip().lower() not in _FALSE_VALUES
+    return bool(self.config.get("test_x7_stable_fallback_on_failure", True))
+
   def _test_x7_apply_numeric_thread_limit(self) -> None:
     _test_x7_apply_numeric_thread_limit(self.config)
 
@@ -396,6 +416,39 @@ class TestX7ParallelAnalyzeMixin:
 
   def _test_x7_stable_process_chunks(self, pairs: list[str], workers: int) -> list[list[str]]:
     return [pairs[index::workers] for index in range(workers) if pairs[index::workers]]
+
+  def _test_x7_dead_stable_workers(self, pending: set[int]) -> list[str]:
+    processes = getattr(self, "_test_x7_stable_processes", None) or []
+    dead_workers = []
+    for worker_index in sorted(pending):
+      if worker_index >= len(processes):
+        dead_workers.append(f"{worker_index}:missing")
+        continue
+      process, _request_queue = processes[worker_index]
+      if not process.is_alive():
+        dead_workers.append(f"{worker_index}:exitcode={process.exitcode}")
+    return dead_workers
+
+  def _test_x7_wait_stable_responses(self, loop_id: int, pending: set[int], phase: str):
+    response_queue = self._test_x7_stable_response_queue
+    timeout = self._test_x7_stable_response_timeout_seconds()
+    while pending:
+      try:
+        response_loop_id, worker_index, result, error = response_queue.get(timeout=timeout)
+      except queue.Empty as exc:
+        dead_workers = self._test_x7_dead_stable_workers(pending)
+        if dead_workers:
+          raise RuntimeError(f"TestX7 stable {phase} worker died: {dead_workers}") from exc
+        raise TimeoutError(
+          f"TestX7 stable {phase} timed out after {timeout:.1f}s waiting for workers={sorted(pending)}"
+        ) from exc
+
+      if response_loop_id != loop_id or worker_index not in pending:
+        continue
+      pending.remove(worker_index)
+      if error is not None:
+        raise RuntimeError(f"TestX7 stable {phase} failed:\n{error}")
+      yield worker_index, result
 
   def _test_x7_open_trade_snapshot(self) -> tuple[int, list[str | None]]:
     try:
@@ -838,6 +891,10 @@ class TestX7ParallelAnalyzeMixin:
     self._test_x7_stable_dataframe_signatures = {}
     self._test_x7_stable_time_buckets = {}
     self._test_x7_stable_loop_id = 0
+    self._test_x7_stable_dataframes_prewarmed = False
+    if not getattr(self, "_test_x7_stable_cleanup_registered", False):
+      atexit.register(self._test_x7_stop_stable_process_workers)
+      self._test_x7_stable_cleanup_registered = True
 
   def _test_x7_prewarm_stable_process_workers(self) -> None:
     if not hasattr(self, "dp"):
@@ -872,20 +929,14 @@ class TestX7ParallelAnalyzeMixin:
       self._test_x7_stable_loop_id += 1
       loop_id = self._test_x7_stable_loop_id
       processes = self._test_x7_stable_processes
-      response_queue = self._test_x7_stable_response_queue
       pending = set()
       for worker_index, chunk in enumerate(chunks):
         payload = self._test_x7_stable_preload_payload(worker_index, chunk, whitelist, source_dataframes)
         processes[worker_index][1].put((loop_id, payload))
         pending.add(worker_index)
 
-      while pending:
-        response_loop_id, worker_index, _result, error = response_queue.get()
-        if response_loop_id != loop_id or worker_index not in pending:
-          continue
-        pending.remove(worker_index)
-        if error is not None:
-          raise RuntimeError(f"TestX7 stable dataframe prewarm failed:\n{error}")
+      for _worker_index, _result in self._test_x7_wait_stable_responses(loop_id, pending, "dataframe prewarm"):
+        pass
       self._test_x7_stable_dataframes_prewarmed = True
       if self._test_x7_stable_prewarm_compute_enabled():
         self._test_x7_stable_loop_id += 1
@@ -896,15 +947,11 @@ class TestX7ParallelAnalyzeMixin:
           processes[worker_index][1].put((loop_id, payload))
           pending.add(worker_index)
 
-        while pending:
-          response_loop_id, worker_index, _result, error = response_queue.get()
-          if response_loop_id != loop_id or worker_index not in pending:
-            continue
-          pending.remove(worker_index)
-          if error is not None:
-            raise RuntimeError(f"TestX7 stable compute prewarm failed:\n{error}")
+        for _worker_index, _result in self._test_x7_wait_stable_responses(loop_id, pending, "compute prewarm"):
+          pass
     except Exception:
       log.exception("TestX7 stable dataframe prewarm failed")
+      self._test_x7_stop_stable_process_workers()
 
   def bot_start(self, **kwargs) -> None:
     result = super().bot_start(**kwargs)
@@ -920,6 +967,7 @@ class TestX7ParallelAnalyzeMixin:
     existing = getattr(self, "_test_x7_stable_processes", None)
     if not existing:
       return
+    response_queue = getattr(self, "_test_x7_stable_response_queue", None)
     for process, request_queue in existing:
       try:
         request_queue.put(None)
@@ -935,7 +983,25 @@ class TestX7ParallelAnalyzeMixin:
           process.terminate()
         except Exception:
           pass
+      try:
+        process.join(timeout=1)
+      except Exception:
+        pass
+    for _process, request_queue in existing:
+      try:
+        request_queue.close()
+      except Exception:
+        pass
+    if response_queue is not None:
+      try:
+        response_queue.close()
+      except Exception:
+        pass
     self._test_x7_stable_processes = None
+    self._test_x7_stable_response_queue = None
+    self._test_x7_stable_dataframe_signatures = {}
+    self._test_x7_stable_time_buckets = {}
+    self._test_x7_stable_dataframes_prewarmed = False
 
   def _test_x7_stable_process_analyze(self, pairs: list[str]) -> None:
     workers = self._test_x7_stable_process_workers(len(pairs))
@@ -971,7 +1037,6 @@ class TestX7ParallelAnalyzeMixin:
     self._test_x7_stable_loop_id += 1
     loop_id = self._test_x7_stable_loop_id
     processes = self._test_x7_stable_processes
-    response_queue = self._test_x7_stable_response_queue
     pending = set()
     for worker_index, chunk in filtered_chunks:
       payload = self._test_x7_stable_process_payload(
@@ -985,20 +1050,21 @@ class TestX7ParallelAnalyzeMixin:
       processes[worker_index][1].put((loop_id, payload))
       pending.add(worker_index)
 
-    while pending:
-      response_loop_id, worker_index, result, error = response_queue.get()
-      if response_loop_id != loop_id or worker_index not in pending:
-        continue
-      pending.remove(worker_index)
-      if error is not None:
-        raise RuntimeError(f"TestX7 stable process analyze failed:\n{error}")
+    for _worker_index, result in self._test_x7_wait_stable_responses(loop_id, pending, "process analyze"):
       for item in result:
         pair, dataframe = item[:2]
         self._test_x7_store_analyzed_dataframe(pair, source_dataframes[pair], dataframe)
 
   def analyze(self, pairs: list[str]) -> None:
     if self._test_x7_stable_process_enabled(len(pairs)):
-      return self._test_x7_stable_process_analyze(pairs)
+      try:
+        return self._test_x7_stable_process_analyze(pairs)
+      except Exception:
+        self._test_x7_stop_stable_process_workers()
+        if not self._test_x7_stable_fallback_enabled():
+          raise
+        log.exception("TestX7 stable process analyze failed; falling back to sequential Freqtrade analyze")
+        return super().analyze(pairs)
 
     if self._test_x7_process_enabled(len(pairs)):
       return self._test_x7_process_analyze(pairs)
@@ -1016,3 +1082,10 @@ class TestX7ParallelAnalyzeMixin:
         except Exception:
           log.exception("TestX7 parallel analyze failed for pair=%s", pair)
           raise
+
+  def bot_stop(self, **kwargs):
+    self._test_x7_stop_stable_process_workers()
+    parent = getattr(super(), "bot_stop", None)
+    if callable(parent):
+      return parent(**kwargs)
+    return None

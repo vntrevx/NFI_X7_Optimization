@@ -9,7 +9,7 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 from freqtrade.persistence import Trade
-from pandas import DataFrame, Series
+from pandas import DataFrame
 
 from test_x7_modules.masks import build_comparison_cache, build_expression_cache
 
@@ -256,10 +256,6 @@ class TestX7EntryLogicMixin:
     _cmp_cached_149 = _cmp("ROC_9_1d", ">", -25.0)
     _cmp_cached_150 = _cmp("ROC_9_1d", ">", -70.0)
     is_backtest = self.dp.runmode.value in ["backtest", "hyperopt", "plot", "webserver"]
-    # the number of free slots
-    current_free_slots = self.config["max_open_trades"]
-    if not is_backtest:
-      current_free_slots = self.config["max_open_trades"] - Trade.get_open_trade_count()
     # Grind mode
     num_open_long_grind_mode = 0
     is_pair_long_grind_mode = metadata["pair"].split("/")[0] in self.grind_mode_coins

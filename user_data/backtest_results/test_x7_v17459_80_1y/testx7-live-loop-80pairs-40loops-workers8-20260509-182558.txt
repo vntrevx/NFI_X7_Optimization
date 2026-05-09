@@ -1,4 +1,0 @@
-loop1=3.051825s loop2=3.386603s loop3=3.062521s loop4=3.288440s loop5=3.830582s loop6=3.090811s loop7=3.181114s loop8=3.444237s loop9=3.109025s loop10=3.187587s loop11=3.360837s loop12=3.092265s loop13=3.218236s loop14=3.420211s loop15=3.178066s loop16=3.311409s loop17=3.709073s loop18=3.172455s loop19=3.174069s loop20=3.346164s loop21=3.313164s loop22=3.350025s loop23=3.378516s loop24=3.179909s loop25=3.278492s loop26=3.423531s loop27=3.161633s loop28=3.187514s loop29=3.738518s loop30=3.136801s loop31=3.165714s loop32=3.478575s loop33=3.117813s loop34=3.261524s loop35=3.423908s loop36=3.116840s loop37=3.161227s loop38=3.402779s loop39=3.173135s loop40=3.288550s
-strategy=TestX7 pairs=80 rows=1200 seconds=137.247212 cached_pairs=80 emitted=3200
-gate_summary loops=40 min=3.051825s avg=3.283842s max=3.830582s over5=0 file=user_data/backtest_results/test_x7_v17459_80_1y/testx7-live-loop-80pairs-40loops-workers8-20260509-182558.txt
-gate=PASS

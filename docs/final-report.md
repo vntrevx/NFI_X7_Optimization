@@ -16,12 +16,12 @@ The original `NostalgiaForInfinityX7.py` file was preserved. The optimized fork 
 | --- | ---: | ---: |
 | Pairs | `80` | `80` |
 | Loops measured | `3` | `40` |
-| Average loop time | `238.833499s` | `3.283842s` |
-| Maximum loop time | `242.990876s` | `3.830582s` |
+| Average loop time | `238.833499s` | `3.340671s` |
+| Maximum loop time | `242.990876s` | `4.221486s` |
 | Loops over 5 seconds | `3/3` | `0/40` |
 | Gate result | failed | `PASS` |
 
-The measured average speedup is about `72.7x`.
+The measured average speedup is about `71.5x`.
 
 ## Trading Parity
 
@@ -89,7 +89,7 @@ These were intentionally left unchanged:
 
 This repository should be read as a performance proof package, not as a new trading system.
 
-## Why 8 Workers
+## Why 9 Workers
 
 The final local test machine exposed 10 CPUs to Docker.
 
@@ -98,9 +98,10 @@ Using all 10 workers looked attractive, but it was less stable:
 | Setting | Result |
 | --- | --- |
 | `10 CPU / 10 workers` | Fast average, but max loop time reached `7.591558s`; failed the 5-second gate |
-| `10 CPU / 8 workers` | Max loop time stayed at `3.830582s`; passed the 5-second gate |
+| `10 CPU / 8 workers` | Hardening recheck had spikes over 5 seconds; failed the 5-second gate |
+| `10 CPU / 9 workers` | Max loop time stayed at `4.221486s`; passed the 5-second gate |
 
-The practical reason is simple: Freqtrade, Python, Docker, and the operating system still need CPU time. Leaving two CPUs outside the worker pool gave the fastest stable result in this local test.
+The practical reason is simple: Freqtrade, Python, Docker, and the operating system still need CPU time. In the final hardening run, leaving one CPU outside the worker pool gave the fastest stable result in this local test.
 
 ## Evidence Files
 
@@ -109,7 +110,7 @@ The practical reason is simple: Freqtrade, Python, Docker, and the operating sys
 | `user_data/backtest_results/test_x7_v17459_80_1y/compare.json` | 80-pair one-year parity |
 | `user_data/backtest_results/test_x7_v17459_final_5s_1y_required/compare.json` | 58-pair one-year parity |
 | `user_data/backtest_results/test_x7_v17459_80_1y/original-live-loop-80pairs-3loops.txt` | Original X7 live-loop timing |
-| `user_data/backtest_results/test_x7_v17459_80_1y/testx7-live-loop-80pairs-40loops-workers8-20260509-182558.txt` | Final `TestX7` 80-pair speed gate |
+| `user_data/backtest_results/test_x7_v17459_80_1y/testx7-live-loop-80pairs-40loops-workers9-20260509-204530.txt` | Final `TestX7` 80-pair speed gate |
 
 ## Reproduce
 
@@ -127,9 +128,17 @@ Run the final speed gate:
 tools/test_x7/run_80pair_5s_gate.sh
 ```
 
+If candle data is outside this checkout, mount it explicitly:
+
+```bash
+TEST_X7_GATE_DATA_DIR_HOST=/path/to/user_data/data/binance \
+  tools/test_x7/run_80pair_5s_gate.sh
+```
+
 Expected final gate output:
 
 ```text
+passes pairs=80 validation
 gate=PASS
 over5=0
 max <= 5.0s
@@ -144,6 +153,6 @@ max <= 5.0s
 
 ## Developer Summary
 
-`TestX7` keeps original X7 as the baseline and adds a separate optimized strategy. In the checked local one-year comparisons, original X7 and `TestX7` produced the same trade surface. In the 80-pair live-style loop test, original X7 averaged `238.833499s`, while `TestX7` averaged `3.283842s` and passed `40/40` loops under the 5-second gate.
+`TestX7` keeps original X7 as the baseline and adds a separate optimized strategy. In the checked local one-year comparisons, original X7 and `TestX7` produced the same trade surface. In the 80-pair live-style loop test, original X7 averaged `238.833499s`, while `TestX7` averaged `3.340671s` and passed `40/40` loops under the 5-second gate.
 
 That makes this a strong candidate for review as a performance and maintainability improvement, not a profit-curve optimization.

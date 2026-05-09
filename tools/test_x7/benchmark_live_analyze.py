@@ -418,7 +418,7 @@ def main() -> int:
   if args.json:
     print(json.dumps(output, indent=2, sort_keys=True))
   else:
-    if args.persistent_process_workers > 1 or args.repeat > 1:
+    if loop_results:
       loop_text = " ".join(f"loop{item['loop']}={item['seconds']:.6f}s" for item in loop_results)
       print(loop_text)
       if args.persistent_process_workers > 1:

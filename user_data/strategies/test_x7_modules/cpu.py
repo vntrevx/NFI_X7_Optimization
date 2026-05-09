@@ -98,4 +98,4 @@ def recommended_process_workers(env_var: str = "TEST_X7_PROCESS_WORKERS") -> int
   topology = detect_cpu_topology()
   if explicit is not None:
     return min(explicit, max(1, topology.logical_cpus))
-  return max(1, topology.logical_cpus)
+  return topology.recommended_workers

@@ -1,0 +1,8 @@
+line-length = 119
+target-version = "py312"
+
+[lint]
+# TestX7 keeps pandas boolean comparisons from the upstream strategy extraction.
+# Rewriting `series == True` to `series` can change NaN handling, so parity
+# checks are safer than an automatic E712 cleanup here.
+ignore = ["E712"]

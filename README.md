@@ -23,15 +23,15 @@ The optimized version is a separate Freqtrade strategy named `TestX7`.
 | --- | ---: | ---: |
 | Pairs | `80` | `80` |
 | Measured loops | `3` | `40` |
-| Average loop time | `238.833499s` | `3.283842s` |
-| Maximum loop time | `242.990876s` | `3.830582s` |
+| Average loop time | `238.833499s` | `3.340671s` |
+| Maximum loop time | `242.990876s` | `4.221486s` |
 | Loops over 5 seconds | `3/3` | `0/40` |
 | Gate result | failed | `PASS` |
 
 Measured average speedup:
 
 ```text
-238.833499 / 3.283842 = 72.7x
+238.833499 / 3.340671 = 71.5x
 ```
 
 ### Trading Parity
@@ -102,7 +102,7 @@ These were intentionally left alone:
 This repository should be read as a performance proof package, not as a new
 trading system and not as a profit-curve optimization.
 
-### Why 8 Workers
+### Why 9 Workers
 
 The final local test machine exposed 10 CPUs to Docker. Using all 10 workers was
 not the best result.
@@ -110,10 +110,13 @@ not the best result.
 | Setting | Result |
 | --- | --- |
 | `10 CPU / 10 workers` | Fast average, but the max loop reached `7.591558s`; failed the 5-second gate |
-| `10 CPU / 8 workers` | Max loop stayed at `3.830582s`; passed the 5-second gate |
+| `10 CPU / 8 workers` | Hardening recheck had spikes over 5 seconds; failed the 5-second gate |
+| `10 CPU / 9 workers` | Max loop stayed at `4.221486s`; passed the 5-second gate |
 
 Leaving CPU headroom for Freqtrade, Python, Docker, and the operating system was
-more stable than assigning every visible CPU to a worker process.
+more stable than assigning every visible CPU to a worker process. In the final
+hardening run, 9 workers was the fastest setting that stayed under the 5-second
+gate for all 40 loops.
 
 ### Reproduce
 
@@ -138,9 +141,17 @@ Run the final 80-pair speed gate:
 tools/test_x7/run_80pair_5s_gate.sh
 ```
 
+If candle data is outside this checkout, mount it explicitly:
+
+```bash
+TEST_X7_GATE_DATA_DIR_HOST=/path/to/user_data/data/binance \
+  tools/test_x7/run_80pair_5s_gate.sh
+```
+
 Expected:
 
 ```text
+passes pairs=80 validation
 gate=PASS
 over5=0
 max <= 5.0s
@@ -149,7 +160,7 @@ max <= 5.0s
 The recorded final run is:
 
 ```text
-user_data/backtest_results/test_x7_v17459_80_1y/testx7-live-loop-80pairs-40loops-workers8-20260509-182558.txt
+user_data/backtest_results/test_x7_v17459_80_1y/testx7-live-loop-80pairs-40loops-workers9-20260509-204530.txt
 ```
 
 ### Evidence Files
@@ -160,7 +171,7 @@ user_data/backtest_results/test_x7_v17459_80_1y/testx7-live-loop-80pairs-40loops
 | `user_data/backtest_results/test_x7_v17459_80_1y/compare.json` | 80-pair one-year trade-surface parity |
 | `user_data/backtest_results/test_x7_v17459_final_5s_1y_required/compare.json` | 58-pair one-year trade-surface parity |
 | `user_data/backtest_results/test_x7_v17459_80_1y/original-live-loop-80pairs-3loops.txt` | Original X7 80-pair live-loop timing |
-| `user_data/backtest_results/test_x7_v17459_80_1y/testx7-live-loop-80pairs-40loops-workers8-20260509-182558.txt` | Final `TestX7` 80-pair speed gate |
+| `user_data/backtest_results/test_x7_v17459_80_1y/testx7-live-loop-80pairs-40loops-workers9-20260509-204530.txt` | Final `TestX7` 80-pair speed gate |
 
 ### Caveats
 
@@ -176,7 +187,7 @@ user_data/backtest_results/test_x7_v17459_80_1y/testx7-live-loop-80pairs-40loops
 `TestX7` keeps original X7 as the baseline and adds a separate optimized strategy.
 In the checked one-year comparisons, original X7 and `TestX7` produced the same
 trade surface. In the 80-pair live-style loop test, original X7 averaged
-`238.833499s`, while `TestX7` averaged `3.283842s` and passed `40/40` loops under
+`238.833499s`, while `TestX7` averaged `3.340671s` and passed `40/40` loops under
 the 5-second gate.
 
 This is a performance and maintainability improvement candidate. It is not a
@@ -204,12 +215,12 @@ claim that the strategy will be more profitable.
 | --- | ---: | ---: |
 | Pair 수 | `80` | `80` |
 | 측정 loop | `3` | `40` |
-| 평균 loop 시간 | `238.833499s` | `3.283842s` |
-| 최대 loop 시간 | `242.990876s` | `3.830582s` |
+| 평균 loop 시간 | `238.833499s` | `3.340671s` |
+| 최대 loop 시간 | `242.990876s` | `4.221486s` |
 | 5초 초과 | `3/3` | `0/40` |
 | Gate 결과 | 실패 | `PASS` |
 
-평균 기준 약 `72.7x` 빨라졌습니다.
+평균 기준 약 `71.5x` 빨라졌습니다.
 
 ### 매매 로직은 그대로인가?
 
@@ -274,16 +285,17 @@ claim that the strategy will be more profitable.
 
 이 저장소는 새 매매 시스템이 아니라 성능 검증 패키지입니다. 수익률을 좋게 보이게 만든 최적화가 아닙니다.
 
-### 왜 workers 8인가
+### 왜 workers 9인가
 
 최종 로컬 테스트에서는 Docker가 CPU 10개를 볼 수 있었습니다. 그렇다고 worker를 10개 쓰는 것이 가장 안정적인 선택은 아니었습니다.
 
 | 설정 | 결과 |
 | --- | --- |
 | `10 CPU / 10 workers` | 평균은 빨랐지만 최대 loop가 `7.591558s`까지 튀어서 5초 게이트 실패 |
-| `10 CPU / 8 workers` | 최대 loop가 `3.830582s`로 유지되어 5초 게이트 통과 |
+| `10 CPU / 8 workers` | hardening 재검증에서 5초 초과 spike가 발생해 5초 게이트 실패 |
+| `10 CPU / 9 workers` | 최대 loop가 `4.221486s`로 유지되어 5초 게이트 통과 |
 
-Freqtrade 본체, Python, Docker, OS scheduler도 CPU 시간이 필요합니다. 보이는 CPU를 전부 worker로 채우는 것보다 2개 정도 여유를 남긴 쪽이 더 안정적이었습니다.
+Freqtrade 본체, Python, Docker, OS scheduler도 CPU 시간이 필요합니다. 최종 hardening 재검증에서는 CPU 10개 중 9개를 worker로 쓰는 쪽이 40회 모두 5초 안에 들어왔습니다.
 
 ### 직접 확인하기
 
@@ -311,6 +323,7 @@ tools/test_x7/run_80pair_5s_gate.sh
 예상 결과:
 
 ```text
+pairs=80 검증 통과
 gate=PASS
 over5=0
 max <= 5.0s
@@ -319,7 +332,7 @@ max <= 5.0s
 기록된 최종 실행 결과:
 
 ```text
-user_data/backtest_results/test_x7_v17459_80_1y/testx7-live-loop-80pairs-40loops-workers8-20260509-182558.txt
+user_data/backtest_results/test_x7_v17459_80_1y/testx7-live-loop-80pairs-40loops-workers9-20260509-204530.txt
 ```
 
 ### 증거 파일
@@ -330,7 +343,7 @@ user_data/backtest_results/test_x7_v17459_80_1y/testx7-live-loop-80pairs-40loops
 | `user_data/backtest_results/test_x7_v17459_80_1y/compare.json` | 80페어 1년 거래 표면 parity |
 | `user_data/backtest_results/test_x7_v17459_final_5s_1y_required/compare.json` | 58페어 1년 거래 표면 parity |
 | `user_data/backtest_results/test_x7_v17459_80_1y/original-live-loop-80pairs-3loops.txt` | 원본 X7 80페어 live-loop 시간 |
-| `user_data/backtest_results/test_x7_v17459_80_1y/testx7-live-loop-80pairs-40loops-workers8-20260509-182558.txt` | 최종 `TestX7` 80페어 speed gate |
+| `user_data/backtest_results/test_x7_v17459_80_1y/testx7-live-loop-80pairs-40loops-workers9-20260509-204530.txt` | 최종 `TestX7` 80페어 speed gate |
 
 ### 주의사항
 
@@ -341,6 +354,6 @@ user_data/backtest_results/test_x7_v17459_80_1y/testx7-live-loop-80pairs-40loops
 
 ### 한국어 요약
 
-`TestX7`는 원본 X7을 기준본으로 남겨두고 별도 최적화 전략을 추가한 작업입니다. 검증한 1년 비교에서는 원본 X7과 `TestX7`의 거래 표면이 같았습니다. 80페어 live-style loop에서는 원본 X7 평균 `238.833499s`가 `TestX7` 평균 `3.283842s`로 줄었고, 40회 반복 모두 5초 안에 끝났습니다.
+`TestX7`는 원본 X7을 기준본으로 남겨두고 별도 최적화 전략을 추가한 작업입니다. 검증한 1년 비교에서는 원본 X7과 `TestX7`의 거래 표면이 같았습니다. 80페어 live-style loop에서는 원본 X7 평균 `238.833499s`가 `TestX7` 평균 `3.340671s`로 줄었고, 40회 반복 모두 5초 안에 끝났습니다.
 
 이 작업은 수익률을 높이기 위한 신호 튜닝이 아니라, 같은 매매 판단을 더 빠르고 구조적으로 계산하기 위한 성능 개선 후보입니다.
