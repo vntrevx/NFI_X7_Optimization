@@ -142,8 +142,7 @@ user_data/backtest_results/test_x7_v17459_80_1y/testx7-live-loop-80pairs-40loops
 | `user_data/backtest_results/test_x7_v17459_final_5s_1y_required/compare.json` | 58-pair one-year parity |
 | `user_data/backtest_results/test_x7_v17459_80_1y/original-live-loop-80pairs-3loops.txt` | Original X7 live-loop speed |
 | `user_data/backtest_results/test_x7_v17459_80_1y/testx7-live-loop-80pairs-40loops-workers8-20260509-182558.txt` | Final TestX7 speed gate |
-| `docs/2026-05-09-test-x7-completion-audit.md` | Full completion checklist |
-| `docs/2026-05-09-test-x7-final-bilingual-report.md` | Korean/English detailed report |
+| `docs/final-report.md` | Single final developer report |
 
 ## Important caveats
 
