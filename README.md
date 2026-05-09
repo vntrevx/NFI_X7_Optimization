@@ -1,105 +1,123 @@
 # NFI X7 Optimization Proof Package
 
-NostalgiaForInfinity X7 is a strong strategy, but the live analysis loop can get painfully slow when many pairs are enabled.
-This repository is a proof package for a local optimized fork called `TestX7`.
+This repository is a local proof package for `TestX7`, an optimized fork of
+`NostalgiaForInfinityX7`.
 
-The goal was simple:
+The work was not aimed at improving the profit curve. The goal was narrower:
 
-> Keep the original X7 trading behavior, but make the live pair analysis finish much faster.
+> Keep the checked X7 trading behavior unchanged, while making the live pair
+> analysis loop fast enough for a wide pairlist.
 
-That goal passed locally.
+That goal passed in the local validation described below.
 
-## 결과 먼저 보기
+## English
 
-최신 NFI X7 원본은 그대로 보존했고, 최적화 버전은 `TestX7`라는 별도 전략으로 만들었다.
+### Result At A Glance
 
-80페어 기준 live-style analysis loop 결과:
+The upstream `NostalgiaForInfinityX7.py` strategy is kept as the baseline.
+The optimized version is a separate Freqtrade strategy named `TestX7`.
 
-| Item | Original X7 | TestX7 |
+80-pair live-style analysis loop:
+
+| Metric | Original X7 | TestX7 |
 | --- | ---: | ---: |
 | Pairs | `80` | `80` |
-| Test loops | `3` | `40` |
+| Measured loops | `3` | `40` |
 | Average loop time | `238.833499s` | `3.283842s` |
-| Max loop time | `242.990876s` | `3.830582s` |
-| Loops over 5s | `3/3` | `0/40` |
-| Gate | failed | `PASS` |
+| Maximum loop time | `242.990876s` | `3.830582s` |
+| Loops over 5 seconds | `3/3` | `0/40` |
+| Gate result | failed | `PASS` |
 
-대략 `72.7x` 빨라졌다.
+Measured average speedup:
 
-중요한 점은 속도만 빨라진 게 아니다. 1년 백테스트에서 원본 X7과 `TestX7`의 거래 결과가 같았다.
+```text
+238.833499 / 3.283842 = 72.7x
+```
 
-| Check | Result |
-| --- | --- |
-| Trade count | `195 == 195` |
-| Total profit | `1156.7473364 USDT == 1156.7473364 USDT` |
-| Profit factor | `67.1806145028 == 67.1806145028` |
-| Max drawdown | `17.47864303 USDT == 17.47864303 USDT` |
-| Trade-by-trade comparison | `trade_surface_equal=true` |
-| First mismatch | `null` |
+### Trading Parity
 
-쉽게 말하면:
+Speed alone is not enough. The important check is whether the optimized strategy
+still makes the same checked trading decisions.
 
-- 원본이 산 코인을 `TestX7`도 샀다.
-- 원본이 판 시점에 `TestX7`도 팔았다.
-- 수익, 태그, 거래 표면이 같았다.
-- 계산만 훨씬 빨라졌다.
+80-pair one-year comparison:
 
-## 이게 뭔가?
+| Metric | Original X7 | TestX7 |
+| --- | ---: | ---: |
+| Total trades | `195` | `195` |
+| Total profit | `1156.7473364 USDT` | `1156.7473364 USDT` |
+| Profit factor | `67.18061450277237` | `67.18061450277237` |
+| Max drawdown | `17.478643030000057 USDT` | `17.478643030000057 USDT` |
+| Trade surface equal | `true` | `true` |
+| First mismatch | `null` | `null` |
 
-`TestX7`는 원본 X7을 직접 덮어쓴 전략이 아니다.
+58-pair one-year comparison:
 
-원본은 `user_data/strategies/NostalgiaForInfinityX7.py`에 그대로 있다.
-최적화 실험판은 `user_data/strategies/TestX7.py`와 `user_data/strategies/test_x7_modules/`에 따로 있다.
+| Metric | Original X7 | TestX7 |
+| --- | ---: | ---: |
+| Total trades | `177` | `177` |
+| Total profit | `829.12929377 USDT` | `829.12929377 USDT` |
+| Profit factor | `5.02415619883808` | `5.02415619883808` |
+| Max drawdown | `206.03804942 USDT` | `206.03804942 USDT` |
+| Trade surface equal | `true` | `true` |
+| First mismatch | `null` | `null` |
 
-기존 X7은 거대한 단일 파일 구조라서 병목을 찾고 바꾸기 어렵다.
-`TestX7`는 그 구조를 기능별 모듈로 나눴다.
+Plainly: in the checked backtests, original X7 and `TestX7` opened the same
+trades, closed the same trades, and produced the same exported trade surface.
+The measured change is performance and structure, not signal tuning.
 
-주요 파일:
+### What Changed
+
+`TestX7` keeps the optimized code outside the original strategy file.
 
 | Path | Purpose |
 | --- | --- |
-| `user_data/strategies/TestX7.py` | Freqtrade strategy entrypoint |
-| `user_data/strategies/test_x7_modules/indicator_logic.py` | Indicator and informative calculations |
-| `user_data/strategies/test_x7_modules/entry_logic.py` | Entry condition logic |
-| `user_data/strategies/test_x7_modules/parallel_analyze.py` | Stable process-worker live analysis path |
-| `user_data/strategies/test_x7_modules/btc_cache.py` | BTC informative cache |
-| `user_data/strategies/test_x7_modules/informative_cache.py` | Non-BTC informative cache |
-| `user_data/strategies/test_x7_modules/merge.py` | Faster informative merge helper |
+| `user_data/strategies/TestX7.py` | Thin Freqtrade strategy entrypoint for `TestX7` |
+| `user_data/strategies/test_x7_modules/indicator_logic.py` | Indicator and informative-timeframe calculations |
+| `user_data/strategies/test_x7_modules/entry_logic.py` | Extracted entry-condition logic |
+| `user_data/strategies/test_x7_modules/parallel_analyze.py` | Stable process-worker path for live pair analysis |
+| `user_data/strategies/test_x7_modules/btc_cache.py` | BTC informative dataframe cache |
+| `user_data/strategies/test_x7_modules/informative_cache.py` | Non-BTC informative dataframe cache |
+| `user_data/strategies/test_x7_modules/merge.py` | Faster no-lookahead informative merge helper |
+| `tools/test_x7/compare_backtests.py` | Trade-surface comparison helper |
 | `tools/test_x7/run_80pair_5s_gate.sh` | Final 80-pair speed gate |
 
-## 바꾸지 않은 것
+The main optimization is the live/dry-run analysis path. Repeated pair analysis
+is split across stable worker processes, while informative dataframes and repeated
+boolean masks are reused where the cache keys prove that the source candle state
+has not changed.
 
-이번 작업은 수익률을 높이려고 신호를 튜닝한 작업이 아니다.
+### What Did Not Change
 
-의도적으로 건드리지 않은 것:
+These were intentionally left alone:
 
-- entry / exit 의미
-- DCA / grind 의미
-- position adjustment 의미
-- leverage / stake callbacks
-- signal tags
+- original `NostalgiaForInfinityX7.py` baseline
 - Freqtrade core
+- entry and exit signal meaning
+- DCA and grind behavior
+- position-adjustment behavior
+- stake and leverage callback meaning
+- signal tag names
 - live laptop deployment
 
-이 저장소는 “매매 로직을 바꿔서 수익이 좋아졌다”가 아니라
-“같은 매매 로직을 훨씬 빠르게 계산했다”를 보여주는 자료다.
+This repository should be read as a performance proof package, not as a new
+trading system and not as a profit-curve optimization.
 
-## 왜 8 workers인가?
+### Why 8 Workers
 
-처음에는 “CPU가 10개면 workers도 10개 쓰면 되지 않나?”라고 볼 수 있다.
-실제로는 그렇지 않았다.
+The final local test machine exposed 10 CPUs to Docker. Using all 10 workers was
+not the best result.
 
 | Setting | Result |
 | --- | --- |
-| `10 CPU / 10 workers` | average was fast, but max hit `7.591558s`; failed |
-| `10 CPU / 8 workers` | max stayed at `3.830582s`; passed |
+| `10 CPU / 10 workers` | Fast average, but the max loop reached `7.591558s`; failed the 5-second gate |
+| `10 CPU / 8 workers` | Max loop stayed at `3.830582s`; passed the 5-second gate |
 
-10개를 전부 계산 worker로 써버리면 Docker, Python, Freqtrade 본체, OS scheduler가 숨 쉴 공간이 줄어든다.
-그래서 최종값은 CPU 10개 중 8개만 worker로 쓰는 쪽이 더 안정적이었다.
+Leaving CPU headroom for Freqtrade, Python, Docker, and the operating system was
+more stable than assigning every visible CPU to a worker process.
 
-## 직접 다시 확인하기
+### Reproduce
 
-### 1. Strategy loading
+Check that both strategies load:
 
 ```bash
 docker compose run --rm freqtrade list-strategies \
@@ -114,7 +132,7 @@ NostalgiaForInfinityX7 OK
 TestX7 OK
 ```
 
-### 2. Final 80-pair speed gate
+Run the final 80-pair speed gate:
 
 ```bash
 tools/test_x7/run_80pair_5s_gate.sh
@@ -128,51 +146,201 @@ over5=0
 max <= 5.0s
 ```
 
-The recorded final run is here:
+The recorded final run is:
 
 ```text
 user_data/backtest_results/test_x7_v17459_80_1y/testx7-live-loop-80pairs-40loops-workers8-20260509-182558.txt
 ```
 
-## Evidence files
+### Evidence Files
 
 | File | What it proves |
 | --- | --- |
-| `user_data/backtest_results/test_x7_v17459_80_1y/compare.json` | 80-pair one-year parity |
-| `user_data/backtest_results/test_x7_v17459_final_5s_1y_required/compare.json` | 58-pair one-year parity |
-| `user_data/backtest_results/test_x7_v17459_80_1y/original-live-loop-80pairs-3loops.txt` | Original X7 live-loop speed |
-| `user_data/backtest_results/test_x7_v17459_80_1y/testx7-live-loop-80pairs-40loops-workers8-20260509-182558.txt` | Final TestX7 speed gate |
-| `docs/final-report.md` | Single final developer report |
+| `docs/final-report.md` | Developer-facing summary of the completed validation |
+| `user_data/backtest_results/test_x7_v17459_80_1y/compare.json` | 80-pair one-year trade-surface parity |
+| `user_data/backtest_results/test_x7_v17459_final_5s_1y_required/compare.json` | 58-pair one-year trade-surface parity |
+| `user_data/backtest_results/test_x7_v17459_80_1y/original-live-loop-80pairs-3loops.txt` | Original X7 80-pair live-loop timing |
+| `user_data/backtest_results/test_x7_v17459_80_1y/testx7-live-loop-80pairs-40loops-workers8-20260509-182558.txt` | Final `TestX7` 80-pair speed gate |
 
-## Important caveats
+### Caveats
 
-This is not a promise of future profit.
+- This is local validation, not a live futures deployment.
+- Backtests do not guarantee future profitability.
+- The 5-second result depends on CPU count, Docker CPU visibility, pair count,
+  data size, and system load.
+- Before any upstream merge, the process-worker boundary, cache invalidation
+  rules, and Freqtrade callback assumptions need careful review.
 
-Backtests are historical simulations. They do not guarantee live results.
-The optimization was validated locally. It has not been deployed to the live laptop futures bot.
+### Developer Summary
 
-Before live use, check:
+`TestX7` keeps original X7 as the baseline and adds a separate optimized strategy.
+In the checked one-year comparisons, original X7 and `TestX7` produced the same
+trade surface. In the 80-pair live-style loop test, original X7 averaged
+`238.833499s`, while `TestX7` averaged `3.283842s` and passed `40/40` loops under
+the 5-second gate.
 
-- the actual machine CPU count
-- Docker CPU visibility
-- futures config
-- exchange/network latency
-- live Freqtrade behavior
+This is a performance and maintainability improvement candidate. It is not a
+claim that the strategy will be more profitable.
 
-## English summary
+---
 
-This repository contains a local proof package for `TestX7`, an optimized fork of NFI X7.
+## 한국어
 
-The original `NostalgiaForInfinityX7.py` is preserved. `TestX7` keeps the same trading surface in the checked one-year backtests, while moving expensive live pair analysis into a stable process-worker path.
+### 한 줄 요약
 
-Final local result:
+`TestX7`는 NFI X7의 수익률을 높이려고 만든 튜닝판이 아닙니다. 목표는 더 좁고 명확했습니다.
 
-- Original X7 80-pair live-loop average: `238.833499s`
-- Final TestX7 80-pair live-loop average: `3.283842s`
-- Final TestX7 max loop time: `3.830582s`
-- Over 5 seconds: `0/40`
-- Final gate: `PASS`
-- 80-pair backtest parity: `trade_surface_equal=true`
-- First mismatch: `null`
+> 검증된 X7 매매 판단은 그대로 유지하고, 많은 pair를 돌릴 때 느려지는 live 분석 루프를 크게 줄인다.
 
-This is not a trading-signal improvement. It is a performance and structure improvement that keeps the checked trading behavior unchanged.
+로컬 검증 기준으로 이 목표는 통과했습니다.
+
+### 결과 먼저 보기
+
+원본 `NostalgiaForInfinityX7.py`는 기준본으로 보존했습니다. 최적화 버전은 `TestX7`라는 별도 전략으로 분리했습니다.
+
+80페어 live-style analysis loop 결과:
+
+| 항목 | 원본 X7 | TestX7 |
+| --- | ---: | ---: |
+| Pair 수 | `80` | `80` |
+| 측정 loop | `3` | `40` |
+| 평균 loop 시간 | `238.833499s` | `3.283842s` |
+| 최대 loop 시간 | `242.990876s` | `3.830582s` |
+| 5초 초과 | `3/3` | `0/40` |
+| Gate 결과 | 실패 | `PASS` |
+
+평균 기준 약 `72.7x` 빨라졌습니다.
+
+### 매매 로직은 그대로인가?
+
+이 작업에서 가장 중요한 부분입니다. 속도만 빨라지고 매매 판단이 바뀌면 의미가 없습니다.
+
+80페어 1년 비교:
+
+| 항목 | 원본 X7 | TestX7 |
+| --- | ---: | ---: |
+| 거래 수 | `195` | `195` |
+| 총수익 | `1156.7473364 USDT` | `1156.7473364 USDT` |
+| Profit factor | `67.18061450277237` | `67.18061450277237` |
+| 최대 낙폭 | `17.478643030000057 USDT` | `17.478643030000057 USDT` |
+| 거래 표면 비교 | `true` | `true` |
+| 첫 불일치 | `null` | `null` |
+
+58페어 1년 비교:
+
+| 항목 | 원본 X7 | TestX7 |
+| --- | ---: | ---: |
+| 거래 수 | `177` | `177` |
+| 총수익 | `829.12929377 USDT` | `829.12929377 USDT` |
+| Profit factor | `5.02415619883808` | `5.02415619883808` |
+| 최대 낙폭 | `206.03804942 USDT` | `206.03804942 USDT` |
+| 거래 표면 비교 | `true` | `true` |
+| 첫 불일치 | `null` | `null` |
+
+쉽게 말하면, 검증한 백테스트 범위에서는 원본이 산 것을 `TestX7`도 샀고, 원본이 판 시점에 `TestX7`도 팔았습니다. 거래 수, 수익, drawdown, tag, exit reason까지 비교한 거래 표면이 같았습니다.
+
+따라서 이번 결과는 “더 잘 벌도록 신호를 바꿨다”가 아니라 “같은 판단을 훨씬 빨리 계산하게 만들었다”에 가깝습니다.
+
+### 무엇을 바꿨나
+
+`TestX7`는 원본 파일을 직접 덮어쓰지 않습니다. 원본은 그대로 두고, 최적화 코드를 별도 전략과 모듈로 분리했습니다.
+
+| 경로 | 역할 |
+| --- | --- |
+| `user_data/strategies/TestX7.py` | `TestX7` 전략 진입점 |
+| `user_data/strategies/test_x7_modules/indicator_logic.py` | 지표 및 informative timeframe 계산 |
+| `user_data/strategies/test_x7_modules/entry_logic.py` | entry 조건 로직 |
+| `user_data/strategies/test_x7_modules/parallel_analyze.py` | live pair 분석용 stable process-worker 경로 |
+| `user_data/strategies/test_x7_modules/btc_cache.py` | BTC informative dataframe cache |
+| `user_data/strategies/test_x7_modules/informative_cache.py` | 일반 informative dataframe cache |
+| `user_data/strategies/test_x7_modules/merge.py` | 더 빠른 no-lookahead informative merge helper |
+| `tools/test_x7/compare_backtests.py` | 원본과 TestX7의 거래 표면 비교 도구 |
+| `tools/test_x7/run_80pair_5s_gate.sh` | 최종 80페어 5초 게이트 |
+
+핵심은 live/dry-run 분석 경로입니다. pair별로 반복되는 무거운 계산을 stable worker process로 나누고, candle 상태가 같다는 것이 확인되는 경우에만 informative dataframe과 반복 boolean mask를 재사용합니다.
+
+### 의도적으로 건드리지 않은 것
+
+다음 영역은 바꾸지 않았습니다.
+
+- 원본 `NostalgiaForInfinityX7.py` 기준본
+- Freqtrade core
+- entry / exit 신호의 의미
+- DCA / grind 동작 의미
+- position adjustment 동작 의미
+- stake / leverage callback 의미
+- signal tag 이름
+- live laptop 배포 상태
+
+이 저장소는 새 매매 시스템이 아니라 성능 검증 패키지입니다. 수익률을 좋게 보이게 만든 최적화가 아닙니다.
+
+### 왜 workers 8인가
+
+최종 로컬 테스트에서는 Docker가 CPU 10개를 볼 수 있었습니다. 그렇다고 worker를 10개 쓰는 것이 가장 안정적인 선택은 아니었습니다.
+
+| 설정 | 결과 |
+| --- | --- |
+| `10 CPU / 10 workers` | 평균은 빨랐지만 최대 loop가 `7.591558s`까지 튀어서 5초 게이트 실패 |
+| `10 CPU / 8 workers` | 최대 loop가 `3.830582s`로 유지되어 5초 게이트 통과 |
+
+Freqtrade 본체, Python, Docker, OS scheduler도 CPU 시간이 필요합니다. 보이는 CPU를 전부 worker로 채우는 것보다 2개 정도 여유를 남긴 쪽이 더 안정적이었습니다.
+
+### 직접 확인하기
+
+두 전략이 모두 로드되는지 확인:
+
+```bash
+docker compose run --rm freqtrade list-strategies \
+  --userdir /freqtrade/user_data \
+  --config /freqtrade/user_data/config-test-x7.example.json
+```
+
+예상 결과:
+
+```text
+NostalgiaForInfinityX7 OK
+TestX7 OK
+```
+
+최종 80페어 speed gate 실행:
+
+```bash
+tools/test_x7/run_80pair_5s_gate.sh
+```
+
+예상 결과:
+
+```text
+gate=PASS
+over5=0
+max <= 5.0s
+```
+
+기록된 최종 실행 결과:
+
+```text
+user_data/backtest_results/test_x7_v17459_80_1y/testx7-live-loop-80pairs-40loops-workers8-20260509-182558.txt
+```
+
+### 증거 파일
+
+| 파일 | 의미 |
+| --- | --- |
+| `docs/final-report.md` | 개발자 검토용 최종 요약 |
+| `user_data/backtest_results/test_x7_v17459_80_1y/compare.json` | 80페어 1년 거래 표면 parity |
+| `user_data/backtest_results/test_x7_v17459_final_5s_1y_required/compare.json` | 58페어 1년 거래 표면 parity |
+| `user_data/backtest_results/test_x7_v17459_80_1y/original-live-loop-80pairs-3loops.txt` | 원본 X7 80페어 live-loop 시간 |
+| `user_data/backtest_results/test_x7_v17459_80_1y/testx7-live-loop-80pairs-40loops-workers8-20260509-182558.txt` | 최종 `TestX7` 80페어 speed gate |
+
+### 주의사항
+
+- 이 결과는 로컬 검증입니다. live futures 서버에 배포한 결과가 아닙니다.
+- 백테스트는 미래 수익을 보장하지 않습니다.
+- 5초 결과는 CPU 수, Docker가 보는 CPU 수, pair 수, 데이터 크기, 현재 시스템 부하에 영향을 받습니다.
+- upstream에 넣으려면 process-worker 경계, cache invalidation 규칙, Freqtrade callback 가정은 별도 코드 리뷰가 필요합니다.
+
+### 한국어 요약
+
+`TestX7`는 원본 X7을 기준본으로 남겨두고 별도 최적화 전략을 추가한 작업입니다. 검증한 1년 비교에서는 원본 X7과 `TestX7`의 거래 표면이 같았습니다. 80페어 live-style loop에서는 원본 X7 평균 `238.833499s`가 `TestX7` 평균 `3.283842s`로 줄었고, 40회 반복 모두 5초 안에 끝났습니다.
+
+이 작업은 수익률을 높이기 위한 신호 튜닝이 아니라, 같은 매매 판단을 더 빠르고 구조적으로 계산하기 위한 성능 개선 후보입니다.
