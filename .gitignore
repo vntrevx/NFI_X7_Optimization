@@ -1,0 +1,32 @@
+.omx/
+.env
+.env.*
+!.env.example
+
+# Local secrets and runtime configs. Commit sanitized *.example.json files instead.
+user_data/config.json
+user_data/config-*.json
+!user_data/config.example.json
+!user_data/config-*.example.json
+
+# Runtime state, databases, logs, and generated artifacts.
+user_data/*.sqlite
+user_data/*.sqlite-*
+user_data/logs/
+user_data/data/
+user_data/backtest_results/
+user_data/hyperopt_results/
+user_data/plot/
+user_data/freqtrade.log
+notify-gateway/data/
+notify-gateway/*.pem
+notify-gateway/*.sqlite3
+notify-gateway/*.sqlite3-*
+
+# Local caches and editor state.
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.cache/
+.DS_Store

@@ -1,0 +1,27 @@
+{
+    "$schema": "https://schema.freqtrade.io/schema.json",
+    "test_x7_profile_enabled": false,
+    "test_x7_entry_line_profile_enabled": false,
+    "test_x7_skip_spot_short_entry_calc": true,
+    "test_x7_skip_spot_short_protection_calc": true,
+    "test_x7_btc_cache_enabled": true,
+    "test_x7_informative_cache_enabled": true,
+    "test_x7_numeric_threads": 1,
+    "test_x7_stable_process_analyze_workers": 8,
+    "test_x7_stable_skip_unchanged_informative": true,
+    "test_x7_stable_prewarm_dataframes": true,
+    "test_x7_stable_prewarm_compute": true,
+    "test_x7_process_tail_rows": 480,
+    "test_x7_process_tail_rows_by_timeframe": {
+        "15m": 128,
+        "1h": 224,
+        "4h": 208,
+        "1d": 48
+    },
+    "test_x7_process_result_tail_rows": 6,
+    "test_x7_base_indicator_tail_rows": 480,
+    "test_x7_indicator_tail_rows": 289,
+    "test_x7_indicator_return_tail": true,
+    "test_x7_entry_tail_rows": 289,
+    "test_x7_entry_return_tail": true
+}

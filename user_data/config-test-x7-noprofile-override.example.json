@@ -1,0 +1,7 @@
+{
+    "$schema": "https://schema.freqtrade.io/schema.json",
+    "test_x7_profile_enabled": false,
+    "test_x7_entry_line_profile_enabled": false,
+    "test_x7_skip_spot_short_entry_calc": true,
+    "test_x7_btc_cache_enabled": true
+}
