@@ -14,6 +14,10 @@ Community questions such as live readiness, dry-run status, backtest speed, and
 worker count are answered in [docs/community-qa.md](docs/community-qa.md).
 Korean version: [docs/community-qa-ko.md](docs/community-qa-ko.md).
 
+Backtest follow-up documents:
+[docs/backtest-profiling-plan.md](docs/backtest-profiling-plan.md) and
+[docs/community-test-report.md](docs/community-test-report.md).
+
 ## English
 
 ### Result At A Glance
@@ -204,6 +208,10 @@ claim that the strategy will be more profitable.
 커뮤니티에서 자주 나오는 질문인 live 적용 가능 여부, dry-run 검증 여부, backtest 속도, worker 수 설정은
 [docs/community-qa-ko.md](docs/community-qa-ko.md)에 한국어로 정리했습니다.
 영어판은 [docs/community-qa.md](docs/community-qa.md)에 있습니다.
+
+Backtest 관련 추가 문서:
+[docs/backtest-profiling-plan.md](docs/backtest-profiling-plan.md),
+[docs/community-test-report.md](docs/community-test-report.md).
 
 ### 한 줄 요약
 
