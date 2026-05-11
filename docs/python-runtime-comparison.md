@@ -1,10 +1,10 @@
 # Python 3.13 vs 3.14 Runtime Comparison Report
 
-This note answers the maintainer question: does the TestX7 speed result depend on Python 3.14?
+I checked whether the TestX7 speed result was mostly coming from Python 3.14, since the maintainer is still on Python 3.13.
 
-Short answer: no. In this local live-style analyze benchmark, Python 3.14 was not the reason for the large speedup. TestX7 also passed the same 80-pair speed gate on Python 3.13.
+In this local live-style analyze benchmark, Python 3.14 was not the reason for the large speedup. TestX7 also passed the same 80-pair speed gate on Python 3.13.
 
-## Maintainer Takeaway
+## Quick Takeaway
 
 - TestX7 was tested on Python 3.13.13 and Python 3.14.4.
 - Both runtimes used Freqtrade 2026.4 and the same major dependency versions.
@@ -49,7 +49,7 @@ Data source: local Binance candle data mounted read-only from freqtrade-nfi
 | Python 3.13.13 | 40 | `2.946143s` | `2.782652s` | `3.378742s` | 0 | PASS |
 | Python 3.14.4 | 40 | `2.969508s` | `2.761902s` | `3.489651s` | 0 | PASS |
 
-Interpretation:
+What I read from this:
 
 - TestX7 works on Python 3.13 and still stays under the 5-second 80-pair gate.
 - In this run, Python 3.14 was not faster than Python 3.13 in a meaningful way.
@@ -64,15 +64,15 @@ Original X7 is much slower, so only one live-style analyze loop was measured per
 | Python 3.13.13 | `NostalgiaForInfinityX7` | 1 | `206.224397s` |
 | Python 3.14.4 | `NostalgiaForInfinityX7` | 1 | `208.610913s` |
 
-Interpretation:
+What I read from this:
 
 - The original strategy remained around 206-209 seconds for one 80-pair live-style loop.
 - Python runtime version does not explain the gap between original X7 and TestX7.
 - The large speedup is from the TestX7 strategy-side changes, not from moving from Python 3.13 to 3.14.
 
-## What This Proves
+## What This Supports
 
-This local benchmark supports one narrow claim:
+This benchmark supports one narrow claim:
 
 ```text
 TestX7 still shows the live-style analyze speedup on Python 3.13.
@@ -80,7 +80,7 @@ TestX7 still shows the live-style analyze speedup on Python 3.13.
 
 It does not support a claim that Python 3.14 is faster for this strategy workload. In this measurement, Python 3.13 and Python 3.14 were effectively the same, with Python 3.13 slightly ahead by a small margin.
 
-## What This Does Not Prove
+## What This Does Not Claim
 
 - It does not prove Python 3.13 is generally faster than Python 3.14.
 - It does not prove the same timing on every VPS or Docker host.
