@@ -194,9 +194,9 @@ If someone tests `TestX7`, ask for:
 6. Only consider real live testing after maintainer review and more hardening.
 ```
 
-## Good Discord Reply Templates
+## Common Community Questions
 
-### If Someone Asks Whether It Is Live-Ready
+### Is TestX7 Live-Ready?
 
 ```text
 Not live-ready yet.
@@ -206,7 +206,7 @@ path, but it still needs maintainer review, dry-run testing, worker limits, and
 more validation before anyone should treat it as production-ready.
 ```
 
-### If Someone Asks Whether They Should Use It
+### Should I Use TestX7?
 
 ```text
 I would not recommend it as a production replacement yet.
@@ -215,7 +215,7 @@ If you want to test it, start with backtesting or dry-run only, compare against
 original X7, and verify that the trade surface matches.
 ```
 
-### If Someone Reports Backtest Results
+### What Should I Share If I Test It?
 
 ```text
 Thanks, that is useful.
@@ -225,7 +225,7 @@ command, worker settings, original runtime, TestX7 runtime, and whether the
 result surface matched?
 ```
 
-### If Someone Says It Uses More CPU
+### Does It Use More CPU?
 
 ```text
 Yes, that is the idea for the analysis bottleneck.
