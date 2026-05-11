@@ -2,6 +2,8 @@
 
 Short answers for common Discord/community questions.
 
+Korean version: [community-qa-ko.md](community-qa-ko.md).
+
 The main rule: do not overclaim. `TestX7` is a local proof package, not an
 official NFI feature and not a production recommendation.
 
