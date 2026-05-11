@@ -4,16 +4,9 @@ This document records an external community report shared by Onur. It is useful
 as a community test case, but it was not independently reproduced in this
 repository.
 
-Claim boundary:
-
-```text
-not production-ready
-not a profit claim
-not globally proven backtest speedup
-external community report
-```
-
-This is a community test report, not a formal benchmark.
+This is an external community report, not a formal benchmark. It is not
+production-ready evidence, not a profit claim, and not globally proven backtest
+speedup.
 
 ## English
 
@@ -60,12 +53,8 @@ about 36% faster
 ```
 
 The user also reported that the results matched. Because no exported summary or
-raw artifact is committed here yet, this repository records that as:
-
-```text
-Result surface matched according to the external community report.
-Not independently reproduced here.
-```
+raw artifact is committed here yet, this repository records that match as an
+external report, not an independently reproduced result.
 
 ### Interpretation
 
@@ -91,24 +80,15 @@ For this report to become independently reviewable, future testers should share:
 - exported trades or parity-comparison output
 - profiler output, if available
 
-### Safe Public Wording
+### Public Summary
 
-Use wording like this:
-
-```text
 A community user reported a MacBook Apple Silicon backtest where Original X7
-took 214s and TestX7 took 137s, about 36% faster, with matched results.
-This is an external community report and has not been independently reproduced
-in this repository.
-```
+took `214s` and `TestX7` took `137s`, about `36%` faster, with matched results.
+This remains an external community report and has not been independently
+reproduced in this repository.
 
-Avoid wording like this:
-
-```text
-TestX7 is production-ready.
-TestX7 improves profit.
-TestX7 globally speeds up all backtests.
-```
+This report does not show that `TestX7` is production-ready, improves profit, or
+globally speeds up all backtests.
 
 ---
 
@@ -157,12 +137,8 @@ about 36% faster
 ```
 
 사용자 보고에 따르면 결과도 matched였습니다. 다만 exported summary나 raw
-artifact가 아직 repo에 없으므로, 이 문서에서는 아래처럼만 기록합니다.
-
-```text
-Result surface matched according to the external community report.
-Not independently reproduced here.
-```
+artifact가 아직 repo에 없으므로, 이 matched 결과는 독립 재현 결과가 아니라
+외부 보고로만 기록합니다.
 
 ### 해석
 
@@ -188,21 +164,12 @@ Freqtrade 버전, NFI 버전, 데이터 구조에 영향을 받습니다.
 - exported trades 또는 parity-comparison output
 - 가능하면 profiler output
 
-### 안전한 공개 표현
+### 공개 요약
 
-아래처럼 말하는 것이 안전합니다.
+Onur가 공유한 MacBook Apple Silicon backtest에서는 원본 X7이 `214s`,
+`TestX7`가 `137s`로 보고되었습니다. 실행 시간은 약 `36%` 줄었고, 결과도
+matched였다고 공유되었습니다.
 
-```text
-A community user reported a MacBook Apple Silicon backtest where Original X7
-took 214s and TestX7 took 137s, about 36% faster, with matched results.
-This is an external community report and has not been independently reproduced
-in this repository.
-```
-
-아래처럼 말하면 안 됩니다.
-
-```text
-TestX7 is production-ready.
-TestX7 improves profit.
-TestX7 globally speeds up all backtests.
-```
+다만 이 내용은 아직 repo 안에서 독립 재현한 결과가 아니라 외부 커뮤니티
+보고입니다. 이 보고만으로 `TestX7`가 production-ready라거나, 수익률을
+개선한다거나, 모든 backtest를 전역적으로 빠르게 만든다고 말할 수는 없습니다.

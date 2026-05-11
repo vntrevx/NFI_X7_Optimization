@@ -3,16 +3,10 @@
 This document describes how to test whether the `TestX7` optimization also
 improves the backtesting path in a future NFI version.
 
-Claim boundary:
-
-```text
-not production-ready
-not a profit claim
-not globally proven backtest speedup
-external community report
-```
-
-This is a profiling plan, not a result claim.
+This is a profiling plan, not a result claim. It is not production-ready
+evidence, not a profit claim, and not globally proven backtest speedup. Any
+current third-party backtest data should be treated as an external community
+report until it is reproduced with exported artifacts.
 
 ## English
 
@@ -157,16 +151,12 @@ Main profiler bottleneck after:
 Notes:
 ```
 
-### Claim Boundary
+### Limitations
 
-Until this plan is executed with exported artifacts, the correct public wording
-is:
-
-```text
-Backtest speed needs separate controlled profiling.
-Current backtest speed evidence includes an external community report, but it is
-not independently reproduced here and is not globally proven backtest speedup.
-```
+Until this plan is executed with exported artifacts, the public claim should
+stay limited: backtest speed still needs separate controlled profiling. Current
+backtest-speed evidence includes an external community report, but it has not
+been independently reproduced here and is not globally proven backtest speedup.
 
 Do not describe the current repository as production-ready. Do not describe any
 runtime difference as a profit improvement.
@@ -313,13 +303,10 @@ Notes:
 
 ### 주장 범위
 
-이 계획을 실제 artifact와 함께 수행하기 전까지는 아래 정도로만 말합니다.
-
-```text
-Backtest speed needs separate controlled profiling.
-Current backtest speed evidence includes an external community report, but it is
-not independently reproduced here and is not globally proven backtest speedup.
-```
+이 계획을 실제 artifact와 함께 수행하기 전까지는 backtest 속도 개선을 확정
+주장하지 않습니다. 현재 backtest-speed 근거에는 외부 커뮤니티 보고가 포함되어
+있지만, 이 repo 안에서 독립 재현한 결과는 아니며 모든 backtest에서 전역적으로
+빨라진다고 증명된 것도 아닙니다.
 
 현재 repo를 production-ready라고 표현하지 않습니다. 속도 차이를 수익률 개선으로
 표현하지도 않습니다.
