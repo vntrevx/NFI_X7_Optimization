@@ -1,0 +1,12 @@
+---
+services:
+  freqtrade:
+    image: nfi-x7-freqtrade:py313-2026.4
+    build:
+      context: .
+      dockerfile: docker/freqtrade-python313.Dockerfile
+      args:
+        PYTHON_IMAGE: "python:3.13-slim"
+        FREQTRADE_VERSION: "2026.4"
+        FT_UID: "${UID:-1000}"
+        FT_GID: "${GID:-1000}"

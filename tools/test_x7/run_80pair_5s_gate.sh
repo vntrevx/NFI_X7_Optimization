@@ -8,10 +8,18 @@ expected_pairs="${TEST_X7_GATE_EXPECTED_PAIRS:-80}"
 output_dir="${TEST_X7_GATE_OUTPUT_DIR:-user_data/backtest_results/test_x7_v17459_80_1y}"
 data_dir_host="${TEST_X7_GATE_DATA_DIR_HOST:-}"
 timestamp="$(date +%Y%m%d-%H%M%S)"
+compose_files="${TEST_X7_COMPOSE_FILES:-}"
+docker_compose=(docker compose)
+if [[ -n "$compose_files" ]]; then
+  IFS=':' read -r -a compose_file_list <<< "$compose_files"
+  for compose_file in "${compose_file_list[@]}"; do
+    docker_compose+=(-f "$compose_file")
+  done
+fi
 
 host_cpus="$(nproc)"
 docker_cpus="$(
-  docker compose run --rm --entrypoint sh freqtrade -lc 'nproc' 2>&1 \
+  "${docker_compose[@]}" run --rm --entrypoint sh freqtrade -lc 'nproc' 2>&1 \
     | awk '/^[0-9]+$/ { value = $0 } END { if (value != "") print value; else exit 1 }'
 )"
 if (( docker_cpus >= 2 )); then
@@ -32,16 +40,19 @@ fi
 
 mkdir -p "$output_dir"
 
-echo "host_cpus=${host_cpus}"
-echo "docker_cpus=${docker_cpus}"
-echo "workers=${workers}"
-echo "repeat=${repeat}"
-echo "max_seconds=${max_seconds}"
-echo "expected_pairs=${expected_pairs}"
-echo "data_dir_host=${data_dir_host:-<repo-default>}"
-echo "output_file=${output_file}"
+{
+  echo "host_cpus=${host_cpus}"
+  echo "docker_cpus=${docker_cpus}"
+  echo "workers=${workers}"
+  echo "repeat=${repeat}"
+  echo "max_seconds=${max_seconds}"
+  echo "expected_pairs=${expected_pairs}"
+  echo "data_dir_host=${data_dir_host:-<repo-default>}"
+  echo "output_file=${output_file}"
+  echo "compose_files=${compose_files:-<default>}"
+} | tee "$output_file"
 
-docker compose run --rm \
+"${docker_compose[@]}" run --rm \
   -e TEST_X7_STABLE_PROCESS_ANALYZE_WORKERS="$workers" \
   -v "$(pwd)":/work \
   "${data_mount_args[@]}" \
@@ -58,7 +69,7 @@ docker compose run --rm \
   --advance-window \
   --prewarm \
   --no-fingerprint \
-  | tee "$output_file"
+  | tee -a "$output_file"
 
 python3 - "$output_file" "$max_seconds" "$expected_pairs" <<'PY' | tee -a "$output_file"
 from __future__ import annotations

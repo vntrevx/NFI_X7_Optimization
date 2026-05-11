@@ -1,0 +1,2 @@
+loop1=208.610913s
+strategy=NostalgiaForInfinityX7 pairs=80 rows=1200 seconds=208.610931 cached_pairs=80 emitted=80

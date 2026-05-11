@@ -15,8 +15,9 @@ worker count are answered in [docs/community-qa.md](docs/community-qa.md).
 Korean version: [docs/community-qa-ko.md](docs/community-qa-ko.md).
 
 Backtest follow-up documents:
-[docs/backtest-profiling-plan.md](docs/backtest-profiling-plan.md) and
-[docs/community-test-report.md](docs/community-test-report.md).
+[docs/backtest-profiling-plan.md](docs/backtest-profiling-plan.md),
+[docs/community-test-report.md](docs/community-test-report.md), and
+[docs/python-runtime-comparison.md](docs/python-runtime-comparison.md).
 
 ## English
 
@@ -211,7 +212,8 @@ claim that the strategy will be more profitable.
 
 Backtest 관련 추가 문서:
 [docs/backtest-profiling-plan.md](docs/backtest-profiling-plan.md),
-[docs/community-test-report.md](docs/community-test-report.md).
+[docs/community-test-report.md](docs/community-test-report.md),
+[docs/python-runtime-comparison.md](docs/python-runtime-comparison.md).
 
 ### 한 줄 요약
 

@@ -1,0 +1,4 @@
+loop1=3.034099s loop2=2.918000s loop3=2.958723s loop4=2.810036s loop5=3.208982s loop6=2.789218s loop7=2.860971s loop8=3.021777s loop9=2.878660s loop10=2.869761s loop11=3.034087s loop12=2.798923s loop13=2.836447s loop14=3.035268s loop15=2.988166s loop16=3.045550s loop17=3.291781s loop18=2.823930s loop19=2.946878s loop20=3.086512s loop21=2.782652s loop22=2.843518s loop23=3.055388s loop24=2.788458s loop25=2.815189s loop26=3.124568s loop27=2.819009s loop28=2.845023s loop29=3.378742s loop30=3.010310s loop31=2.805993s loop32=3.232997s loop33=2.809015s loop34=2.809643s loop35=3.089616s loop36=2.829807s loop37=2.810493s loop38=3.111936s loop39=2.836016s loop40=2.809569s
+strategy=TestX7 pairs=80 rows=1200 seconds=123.710261 cached_pairs=80 emitted=3200
+gate_summary pairs=80 loops=40 min=2.782652s avg=2.946143s max=3.378742s over5=0 file=user_data/backtest_results/test_x7_python313_80pair_gate/testx7-live-loop-80pairs-40loops-workers9-20260512-001929.txt
+gate=PASS
