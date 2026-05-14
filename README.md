@@ -19,6 +19,9 @@ Backtest follow-up documents:
 [docs/community-test-report.md](docs/community-test-report.md), and
 [docs/python-runtime-comparison.md](docs/python-runtime-comparison.md).
 
+Latest rebase check:
+[docs/testx7-v17483-rebase-report.md](docs/testx7-v17483-rebase-report.md).
+
 ## English
 
 ### Result At A Glance
@@ -176,6 +179,9 @@ user_data/backtest_results/test_x7_v17459_80_1y/testx7-live-loop-80pairs-40loops
 
 | File | What it proves |
 | --- | --- |
+| `docs/testx7-v17483-rebase-report.md` | `TestX7` rebase to upstream X7 `v17.4.83` |
+| `user_data/backtest_results/test_x7_v17483_80_1y/compare.json` | 80-pair one-year `v17.4.83` trade-surface parity |
+| `user_data/backtest_results/test_x7_v17483_80_1y/testx7-live-loop-80pairs-40loops-workers9-20260515-040517.txt` | `v17.4.83` 80-pair speed gate |
 | `docs/final-report.md` | Developer-facing summary of the completed validation |
 | `user_data/backtest_results/test_x7_v17459_80_1y/compare.json` | 80-pair one-year trade-surface parity |
 | `user_data/backtest_results/test_x7_v17459_final_5s_1y_required/compare.json` | 58-pair one-year trade-surface parity |
@@ -214,6 +220,9 @@ Backtest 관련 추가 문서:
 [docs/backtest-profiling-plan.md](docs/backtest-profiling-plan.md),
 [docs/community-test-report.md](docs/community-test-report.md),
 [docs/python-runtime-comparison.md](docs/python-runtime-comparison.md).
+
+최신 rebase 검증:
+[docs/testx7-v17483-rebase-report.md](docs/testx7-v17483-rebase-report.md).
 
 ### 한 줄 요약
 

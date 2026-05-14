@@ -232,7 +232,9 @@ class TestX7IndicatorLogicMixin:
     # RSI
     informative_1d["RSI_3"] = ta.RSI(informative_1d, timeperiod=3)
     informative_1d["RSI_14"] = ta.RSI(informative_1d, timeperiod=14)
-    informative_1d["RSI_3_change_pct"] = informative_1d["RSI_3"].pct_change() * 100.0
+    informative_1d["RSI_3_change_pct"] = (
+      informative_1d["RSI_3"].fillna(float("nan")).pct_change(fill_method=None) * 100.0
+    )
     # MFI
     informative_1d["MFI_14"] = ta.MFI(informative_1d, timeperiod=14)
     # CMF
@@ -339,11 +341,15 @@ class TestX7IndicatorLogicMixin:
     # RSI
     informative_4h["RSI_3"] = ta.RSI(informative_4h, timeperiod=3)
     informative_4h["RSI_14"] = ta.RSI(informative_4h, timeperiod=14)
-    informative_4h["RSI_3_change_pct"] = informative_4h["RSI_3"].pct_change() * 100.0
-    informative_4h["RSI_14_change_pct"] = informative_4h["RSI_14"].pct_change() * 100.0
+    informative_4h["RSI_3_change_pct"] = (
+      informative_4h["RSI_3"].fillna(float("nan")).pct_change(fill_method=None) * 100.0
+    )
+    informative_4h["RSI_14_change_pct"] = (
+      informative_4h["RSI_14"].fillna(float("nan")).pct_change(fill_method=None) * 100.0
+    )
     # EMA
     informative_4h["EMA_12"] = ta.EMA(informative_4h, timeperiod=12)
-    informative_4h["EMA_200"] = ta.EMA(informative_4h, timeperiod=200)
+    informative_4h["EMA_200"] = ta.EMA(informative_4h, timeperiod=200).fillna(0.0)
     # MFI
     informative_4h["MFI_14"] = ta.MFI(informative_4h, timeperiod=14)
     # CMF
@@ -456,11 +462,15 @@ class TestX7IndicatorLogicMixin:
     # RSI
     informative_1h["RSI_3"] = ta.RSI(informative_1h, timeperiod=3)
     informative_1h["RSI_14"] = ta.RSI(informative_1h, timeperiod=14)
-    informative_1h["RSI_3_change_pct"] = informative_1h["RSI_3"].pct_change() * 100.0
-    informative_1h["RSI_14_change_pct"] = informative_1h["RSI_14"].pct_change() * 100.0
+    informative_1h["RSI_3_change_pct"] = (
+      informative_1h["RSI_3"].fillna(float("nan")).pct_change(fill_method=None) * 100.0
+    )
+    informative_1h["RSI_14_change_pct"] = (
+      informative_1h["RSI_14"].fillna(float("nan")).pct_change(fill_method=None) * 100.0
+    )
     # EMA
     informative_1h["EMA_12"] = ta.EMA(informative_1h, timeperiod=12)
-    informative_1h["EMA_200"] = ta.EMA(informative_1h, timeperiod=200)
+    informative_1h["EMA_200"] = ta.EMA(informative_1h, timeperiod=200).fillna(0.0)
     # SMA
     informative_1h["SMA_16"] = ta.SMA(informative_1h, timeperiod=16)
     # BB 20 - STD2
@@ -690,8 +700,8 @@ class TestX7IndicatorLogicMixin:
     df["EMA_20"] = ta.EMA(df, timeperiod=20)
     df["EMA_26"] = ta.EMA(df, timeperiod=26)
     df["EMA_50"] = ta.EMA(df, timeperiod=50)
-    df["EMA_100"] = ta.EMA(df, timeperiod=100)
-    df["EMA_200"] = ta.EMA(df, timeperiod=200)
+    df["EMA_100"] = ta.EMA(df, timeperiod=100).fillna(0.0)
+    df["EMA_200"] = ta.EMA(df, timeperiod=200).fillna(0.0)
     # SMA
     df["SMA_9"] = ta.SMA(df, timeperiod=9)
     df["SMA_16"] = ta.SMA(df, timeperiod=16)

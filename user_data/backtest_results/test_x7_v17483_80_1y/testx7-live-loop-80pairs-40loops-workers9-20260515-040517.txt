@@ -1,0 +1,10 @@
+workers=9
+repeat=40
+max_seconds=5.0
+expected_pairs=80
+data_dir_host=\\wsl.localhost\Ubuntu\home\user\project\freqtrade-nfi\user_data\data\binance
+output_file=user_data/backtest_results/test_x7_v17483_80_1y/testx7-live-loop-80pairs-40loops-workers9-20260515-040517.txt
+loop1=2.907092s loop2=3.352747s loop3=2.816369s loop4=2.927870s loop5=3.566067s loop6=3.648290s loop7=3.624098s loop8=3.727445s loop9=3.657095s loop10=3.260700s loop11=3.672006s loop12=2.987305s loop13=3.167196s loop14=3.275950s loop15=3.200797s loop16=3.415784s loop17=4.109911s loop18=3.213592s loop19=3.195084s loop20=3.946854s loop21=3.377367s loop22=3.406768s loop23=3.260466s loop24=3.647033s loop25=3.084403s loop26=3.777557s loop27=3.625145s loop28=3.463143s loop29=4.371312s loop30=3.455967s loop31=2.748953s loop32=2.934199s loop33=2.862742s loop34=2.727310s loop35=3.028743s loop36=2.801532s loop37=2.772902s loop38=2.951768s loop39=2.738253s loop40=2.729349s
+strategy=TestX7 pairs=80 rows=1200 seconds=138.392871 cached_pairs=80 emitted=3200
+gate_summary pairs=80 loops=40 min=2.727310s avg=3.285929s max=4.371312s over5=0 file=user_data/backtest_results/test_x7_v17483_80_1y/testx7-live-loop-80pairs-40loops-workers9-20260515-040517.txt
+gate=PASS

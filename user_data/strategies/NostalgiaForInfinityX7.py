@@ -45,7 +45,7 @@ warnings.simplefilter(action="ignore", category=pd.errors.PerformanceWarning)
 ##   BTC: bc1qvflsvddkmxh7eqhc4jyu5z5k6xcw3ay8jl49sk                                                       ##
 ##   ETH (ERC20): 0x83D3cFb8001BDC5d2211cBeBB8cB3461E5f7Ec91                                               ##
 ##   BEP20/BSC (USDT, ETH, BNB, ...): 0x86A0B21a20b39d16424B7c8003E4A7e12d78ABEe                           ##
-##   TRC20/TRON (USDT, TRON, ...): TTAa9MX7zMLXNgWMhg7tkNormVHWCoq8Xk                                      ##
+##   TRC20/TRON (USDT, TRON, ...): TTAa9MX6zMLXNgWMhg7tkNormVHWCoq8Xk                                      ##
 ##                                                                                                         ##
 ##  Patreon: https://www.patreon.com/iterativ                                                              ##
 ##                                                                                                         ##
@@ -57,8 +57,9 @@ warnings.simplefilter(action="ignore", category=pd.errors.PerformanceWarning)
 ##  OKX: https://www.okx.com/join/11749725931 (20% discount on trading fees)                               ##
 ##  MEXC: https://promote.mexc.com/b/nfinfinity (10% discount on trading fees)                             ##
 ##  ByBit: https://partner.bybit.com/b/nfi                                                                 ##
-##  Bitget: https://bonus.bitget.com/fdqe83481698435803831 (lifetime 20% +10% extra spot rebate)           ##
-##  BitMart: https://www.bitmart.com/invite/nfinfinity/en-US (20% lifetime discount on trading fees)       ##
+##  Bitget: https://bonus.bitget.com/nfinfinity (lifetime 20% +10% extra spot rebate)                      ##
+##  Kraken: https://proinvite.kraken.com/9f1e/cctimhte                                                     ##
+##  BitMart: https://www.bitmart.com/invite/nfinfinity (20% lifetime discount on trading fees)             ##
 ##  HTX: https://www.htx.com/invite/en-us/1f?invite_code=ubpt2223                                          ##
 ##         (Welcome Bonus worth 241 USDT upon completion of a deposit and trade)                           ##
 ##  Bitvavo: https://bitvavo.com/invite?a=D22103A4BC (no fees for the first € 10000)                       ##
@@ -69,7 +70,7 @@ class NostalgiaForInfinityX7(IStrategy):
   INTERFACE_VERSION = 3
 
   def version(self) -> str:
-    return "v17.4.59"
+    return "v17.4.83"
 
   stoploss = -0.99
 
@@ -3030,10 +3031,14 @@ class NostalgiaForInfinityX7(IStrategy):
     # RSI
     informative_1d["RSI_3"] = pta.rsi(informative_1d["close"], length=3)
     informative_1d["RSI_14"] = pta.rsi(informative_1d["close"], length=14)
-    informative_1d["RSI_3_change_pct"] = informative_1d["RSI_3"].pct_change() * 100.0
-    informative_1d["RSI_14_change_pct"] = informative_1d["RSI_14"].pct_change() * 100.0
-    informative_1d["RSI_3_diff"] = informative_1d["RSI_3"].diff()
-    informative_1d["RSI_14_diff"] = informative_1d["RSI_14"].diff()
+    informative_1d["RSI_3_change_pct"] = (
+      informative_1d["RSI_3"].fillna(float("nan")).pct_change(fill_method=None) * 100.0
+    )
+    informative_1d["RSI_14_change_pct"] = (
+      informative_1d["RSI_14"].fillna(float("nan")).pct_change(fill_method=None) * 100.0
+    )
+    informative_1d["RSI_3_diff"] = informative_1d["RSI_3"].fillna(float("nan")).diff()
+    informative_1d["RSI_14_diff"] = informative_1d["RSI_14"].fillna(float("nan")).diff()
     # BB 20 - STD2
     bbands_20_2 = pta.bbands(informative_1d["close"], length=20)
     informative_1d["BBL_20_2.0"] = bbands_20_2["BBL_20_2.0"] if isinstance(bbands_20_2, pd.DataFrame) else np.nan
@@ -3162,10 +3167,14 @@ class NostalgiaForInfinityX7(IStrategy):
     # RSI
     informative_4h["RSI_3"] = pta.rsi(informative_4h["close"], length=3)
     informative_4h["RSI_14"] = pta.rsi(informative_4h["close"], length=14)
-    informative_4h["RSI_3_change_pct"] = informative_4h["RSI_3"].pct_change() * 100.0
-    informative_4h["RSI_14_change_pct"] = informative_4h["RSI_14"].pct_change() * 100.0
-    informative_4h["RSI_3_diff"] = informative_4h["RSI_3"].diff()
-    informative_4h["RSI_14_diff"] = informative_4h["RSI_14"].diff()
+    informative_4h["RSI_3_change_pct"] = (
+      informative_4h["RSI_3"].fillna(float("nan")).pct_change(fill_method=None) * 100.0
+    )
+    informative_4h["RSI_14_change_pct"] = (
+      informative_4h["RSI_14"].fillna(float("nan")).pct_change(fill_method=None) * 100.0
+    )
+    informative_4h["RSI_3_diff"] = informative_4h["RSI_3"].fillna(float("nan")).diff()
+    informative_4h["RSI_14_diff"] = informative_4h["RSI_14"].fillna(float("nan")).diff()
     # EMA
     informative_4h["EMA_12"] = pta.ema(informative_4h["close"], length=12)
     informative_4h["EMA_200"] = pta.ema(informative_4h["close"], length=200, fillna=0.0)
@@ -3322,10 +3331,14 @@ class NostalgiaForInfinityX7(IStrategy):
     # RSI
     informative_1h["RSI_3"] = pta.rsi(informative_1h["close"], length=3)
     informative_1h["RSI_14"] = pta.rsi(informative_1h["close"], length=14)
-    informative_1h["RSI_3_change_pct"] = informative_1h["RSI_3"].pct_change() * 100.0
-    informative_1h["RSI_14_change_pct"] = informative_1h["RSI_14"].pct_change() * 100.0
-    informative_1h["RSI_3_diff"] = informative_1h["RSI_3"].diff()
-    informative_1h["RSI_14_diff"] = informative_1h["RSI_14"].diff()
+    informative_1h["RSI_3_change_pct"] = (
+      informative_1h["RSI_3"].fillna(float("nan")).pct_change(fill_method=None) * 100.0
+    )
+    informative_1h["RSI_14_change_pct"] = (
+      informative_1h["RSI_14"].fillna(float("nan")).pct_change(fill_method=None) * 100.0
+    )
+    informative_1h["RSI_3_diff"] = informative_1h["RSI_3"].fillna(float("nan")).diff()
+    informative_1h["RSI_14_diff"] = informative_1h["RSI_14"].fillna(float("nan")).diff()
     # EMA
     informative_1h["EMA_12"] = pta.ema(informative_1h["close"], length=12)
     informative_1h["EMA_200"] = pta.ema(informative_1h["close"], length=200, fillna=0.0)
@@ -12925,6 +12938,8 @@ class NostalgiaForInfinityX7(IStrategy):
             & ((df["RSI_3_4h"] > 40.0) | (df["AROONU_14_1h"] < 70.0) | (df["ROC_9_1d"] < 40.0))
             # 4h down move, 4h & 1d downtrend
             & ((df["RSI_3_4h"] > 40.0) | (df["AROONU_14_4h"] < 80.0) | (df["AROONU_14_1d"] < 100.0))
+            # 4h down move, 4h still high, 1d overbought
+            & ((df["RSI_3_4h"] > 40.0) | (df["STOCHRSIk_14_14_3_3_4h"] < 40.0) | (df["ROC_9_1d"] < 50.0))
             # 4h down move, 4h high, 1d downtrend
             & ((df["RSI_3_4h"] > 40.0) | (df["STOCHRSIk_14_14_3_3_4h"] < 70.0) | (df["ROC_9_1d"] > -60.0))
             # 4h down move, 1d high & overbought
@@ -13172,6 +13187,8 @@ class NostalgiaForInfinityX7(IStrategy):
             & ((df["RSI_3_15m"] > 20.0) | (df["AROONU_14_15m"] < 60.0) | (df["ROC_9_4h"] < 10.0))
             # 15m down move, 15m high, 4h overbought
             & ((df["RSI_3_15m"] > 20.0) | (df["AROONU_14_15m"] < 70.0) | (df["ROC_9_4h"] < 20.0))
+            # 15m down move, 15m high, 4h downtrend
+            & ((df["RSI_3_15m"] > 20.0) | (df["AROONU_14_15m"] < 70.0) | (df["ROC_9_4h"] > -10.0))
             # 15m down move, 15m high, 1d downtrend
             & ((df["RSI_3_15m"] > 20.0) | (df["AROONU_14_15m"] < 70.0) | (df["ROC_9_1d"] > -20.0))
             # 15m down move, 15m high, 1d overbought
@@ -14246,7 +14263,7 @@ class NostalgiaForInfinityX7(IStrategy):
             # 4h down move, 4h still high, 1d downtrend
             & ((df["RSI_3_4h"] > 10.0) | (df["STOCHRSIk_14_14_3_3_4h"] < 40.0) | (df["ROC_9_1d"] > -20.0))
             # 4h down move, 4h downtrend, 1d overbought
-            & ((df["RSI_3_4h"] > 10.0) | (df["ROC_9_4h"] > -30.0) | (df["ROC_9_1d"] < 40.0))
+            & ((df["RSI_3_4h"] > 10.0) | (df["ROC_9_4h"] > -20.0) | (df["ROC_9_1d"] < 40.0))
             # 4h & 1d down move, 4h downtrend
             & ((df["RSI_3_4h"] > 15.0) | (df["RSI_3_1d"] > 20.0) | (df["ROC_9_4h"] > -40.0))
             # 4h down move, 1h high, 1d downtrend
@@ -17468,6 +17485,8 @@ class NostalgiaForInfinityX7(IStrategy):
           long_entry_logic.append((df["RSI_3_1h"] > 10.0) | (df["AROONU_14_4h"] < 85.0))
           # 1h down move, 1d high & overbought
           long_entry_logic.append((df["RSI_3_1h"] > 10.0) | (df["AROONU_14_1d"] < 70.0) | (df["ROC_9_1d"] < 50.0))
+          # 1h down move, 1d overbought
+          long_entry_logic.append((df["RSI_3_1h"] > 10.0) | (df["ROC_9_1d"] < 100.0))
           # 1h & 4h down move, 4h still high
           long_entry_logic.append((df["RSI_3_1h"] > 15.0) | (df["RSI_3_4h"] > 15.0) | (df["AROONU_14_4h"] < 40.0))
           # 1h & 4h down move, 1d high
@@ -18157,6 +18176,8 @@ class NostalgiaForInfinityX7(IStrategy):
             & ((df["RSI_3_1h"] > 10.0) | (df["STOCHRSIk_14_14_3_3_4h"] < 50.0) | (df["ROC_9_1d"] > -50.0))
             # 1h down move, 4h downtrend, 1d overbought
             & ((df["RSI_3_1h"] > 10.0) | (df["ROC_9_4h"] > -10.0) | (df["ROC_9_1d"] < 40.0))
+            # 1h down move, 1d overbought
+            & ((df["RSI_3_1h"] > 10.0) | (df["ROC_9_1d"] < 100.0))
             # 1h & 4h down move, 4h high
             & ((df["RSI_3_1h"] > 15.0) | (df["RSI_3_4h"] > 40.0) | (df["AROONU_14_4h"] < 80.0))
             # 1h down move, 1d downtrend, 1d high
@@ -18873,7 +18894,7 @@ class NostalgiaForInfinityX7(IStrategy):
             # 1h & 4h down move, 4h still not low enough
             & ((df["RSI_3_1h"] > 10.0) | (df["RSI_3_4h"] > 10.0) | (df["STOCHRSIk_14_14_3_3_4h"] < 20.0))
             # 1h down move, 1d overbought
-            & ((df["RSI_3_1h"] > 10.0) | (df["ROC_9_1d"] < 200.0))
+            & ((df["RSI_3_1h"] > 10.0) | (df["ROC_9_1d"] < 100.0))
             # 1h & 4h down move, 1h still not low enough
             & ((df["RSI_3_1h"] > 15.0) | (df["RSI_3_4h"] > 15.0) | (df["STOCHRSIk_14_14_3_3_1h"] < 30.0))
             # 1h & 4h down move, 15m high
@@ -20657,6 +20678,8 @@ class NostalgiaForInfinityX7(IStrategy):
           )
           # 4h down move, 4h still high, 1d overbought
           long_entry_logic.append((df["RSI_3_4h"] > 30.0) | (df["AROONU_14_4h"] < 40.0) | (df["ROC_9_1d"] < 100.0))
+          # 4h down move, 4h high, 1h downtrend
+          long_entry_logic.append((df["RSI_3_4h"] > 30.0) | (df["AROONU_14_4h"] < 80.0) | (df["ROC_9_1h"] > -30.0))
           # 4h down move, 4h still high, 1d overbought
           long_entry_logic.append((df["RSI_3_4h"] > 35.0) | (df["AROONU_14_4h"] < 50.0) | (df["ROC_9_1d"] < 40.0))
           # 4h down move, 4h still high, 1d high
@@ -21984,6 +22007,8 @@ class NostalgiaForInfinityX7(IStrategy):
             & ((df["RSI_3_4h"] > 10.0) | (df["AROONU_14_4h"] < 40.0) | (df["ROC_9_4h"] > -20.0))
             # 4h down move, 1d still high, 1d downtrend
             & ((df["RSI_3_4h"] > 10.0) | (df["AROONU_14_1d"] < 40.0) | (df["ROC_9_1d"] > -30.0))
+            # 4h down move, 1d high, 15m high
+            & ((df["RSI_3_4h"] > 10.0) | (df["AROONU_14_1d"] < 80.0) | (df["STOCHRSIk_14_14_3_3_15m"] < 60.0))
             # 4h down move, 1d high, 4h downtrend
             & ((df["RSI_3_4h"] > 10.0) | (df["AROONU_14_1d"] < 100.0) | (df["ROC_9_4h"] > -10.0))
             # 4h down move, 4h & 1d downtrend
@@ -22004,6 +22029,8 @@ class NostalgiaForInfinityX7(IStrategy):
             & ((df["RSI_3_4h"] > 20.0) | (df["RSI_3_1d"] > 25.0) | (df["ROC_9_1d"] > -30.0))
             # 4h down move, 1d high & overbought
             & ((df["RSI_3_4h"] > 20.0) | (df["AROONU_14_1d"] < 80.0) | (df["ROC_9_1d"] < 70.0))
+            # 4h & 1d down move, 4h overbought
+            & ((df["RSI_3_4h"] > 25.0) | (df["RSI_3_1d"] > 45.0) | (df["ROC_9_4h"] < 5.0))
             # 4h & 1d down move, 1d overbought
             & ((df["RSI_3_4h"] > 25.0) | (df["RSI_3_1d"] > 45.0) | (df["ROC_9_1d"] < 10.0))
             # 4h & 1d down move, 1d overbought
@@ -22024,8 +22051,6 @@ class NostalgiaForInfinityX7(IStrategy):
             & ((df["RSI_3_1d"] > 10.0) | (df["ROC_9_4h"] > -20.0) | (df["ROC_9_1d"] > -20.0))
             # 1d down move, 1d high, 4h downtrend
             & ((df["RSI_3_1d"] > 15.0) | (df["AROONU_14_1d"] < 70.0) | (df["ROC_9_4h"] > -20.0))
-            # 4h & 1d down move, 4h overbought
-            & ((df["RSI_3_4h"] > 25.0) | (df["RSI_3_1d"] > 45.0) | (df["ROC_9_4h"] < 5.0))
             # 1d down move, 1h & 4h high
             & ((df["RSI_3_1d"] > 25.0) | (df["AROONU_14_1h"] < 70.0) | (df["AROONU_14_4h"] < 100.0))
             # 1d down move, 1h & 4h high
@@ -23199,7 +23224,7 @@ class NostalgiaForInfinityX7(IStrategy):
             # 4h down move, 4h still high, 1d downtrend
             & ((df["RSI_3_4h"] > 50.0) | (df["RSI_14_4h"] < 40.0) | (df["ROC_9_1d"] > -30.0))
             # 4h down move, 4h high & overbought
-            & ((df["RSI_3_4h"] > 50.0) | (df["AROONU_14_4h"] < 85.0) | (df["ROC_9_4h"] < 10.0))
+            & ((df["RSI_3_4h"] > 50.0) | (df["AROONU_14_4h"] < 70.0) | (df["ROC_9_4h"] < 10.0))
             # 4h down move, 15m still high, 1d overbought
             & ((df["RSI_3_4h"] > 55.0) | (df["AROONU_14_15m"] < 40.0) | (df["ROC_9_1d"] < 100.0))
             # 4h & 1d down move, 4h high, 1d overbought
@@ -47423,18 +47448,19 @@ class NostalgiaForInfinityX7(IStrategy):
         and (last_candle["RSI_3_15m"] > 10.0)
         and (last_candle["RSI_3_1h"] > 15.0)
         and (last_candle["RSI_3_4h"] > 15.0)
-        and (last_candle["RSI_14"] < 46.0)
+        and (last_candle["RSI_14"] < 45.0)
         and (last_candle["AROONU_14"] < 25.0)
+        and (last_candle["AROONU_14_4h"] < 100.0)
         and (last_candle["close"] > (last_candle["close_max_48"] * 0.90))
         and (last_candle["close"] < (last_candle["low_min_24_4h"] * 1.60))
         and (last_candle["close"] < (last_candle["EMA_16"] * 0.980))
       )
       or (
-        (last_candle["RSI_14"] < 36.0)
-        and (last_candle["RSI_3"] > 5.0)
+        (last_candle["RSI_3"] > 5.0)
         and (last_candle["RSI_3_15m"] > 10.0)
         and (last_candle["RSI_3_1h"] > 15.0)
         and (last_candle["RSI_3_4h"] > 15.0)
+        and (last_candle["RSI_14"] < 30.0)
         and (last_candle["STOCHRSIk_14_14_3_3"] < 30.0)
         and (last_candle["EMA_26"] > last_candle["EMA_12"])
         and ((last_candle["EMA_26"] - last_candle["EMA_12"]) > (last_candle["open"] * 0.020))
@@ -47442,47 +47468,48 @@ class NostalgiaForInfinityX7(IStrategy):
         and (last_candle["close"] < (last_candle["BBL_20_2.0"] * 1.010))
       )
       or (
-        (last_candle["RSI_14"] < 36.0)
-        and (last_candle["RSI_3"] > 10.0)
+        (last_candle["RSI_3"] > 10.0)
         and (last_candle["RSI_3_15m"] > 10.0)
         and (last_candle["RSI_3_1h"] > 10.0)
         and (last_candle["RSI_3_4h"] > 15.0)
+        and (last_candle["RSI_14"] < 35.0)
         and (last_candle["AROONU_14_15m"] < 25.0)
+        and (last_candle["ROC_9_1h"] > -20.0)
+        and (last_candle["ROC_9_4h"] > -20.0)
         and (last_candle["close"] > (last_candle["close_max_48"] * 0.90))
         and (last_candle["close"] < (last_candle["EMA_12"] * 0.980))
       )
       or (
-        (last_candle["RSI_14"] < 36.0)
-        and (last_candle["RSI_3"] > 10.0)
+        (last_candle["RSI_3"] > 10.0)
         and (last_candle["RSI_3_15m"] > 10.0)
         and (last_candle["RSI_3_1h"] > 10.0)
         and (last_candle["RSI_3_4h"] > 10.0)
         and (last_candle["RSI_3_1d"] > 10.0)
+        and (last_candle["RSI_14"] < 35.0)
         and (last_candle["AROONU_14"] < 25.0)
         and (last_candle["close"] > (last_candle["close_max_48"] * 0.90))
-        and (last_candle["close"] < (last_candle["EMA_26"] * 0.975))
+        and (last_candle["close"] < (last_candle["EMA_26"] * 0.970))
         and (last_candle["close"] < (last_candle["BBL_20_2.0"] * 0.999))
       )
       or (
-        (last_candle["RSI_14"] < 35.0)
-        and (last_candle["RSI_3"] > 10.0)
+        (last_candle["RSI_3"] > 10.0)
         and (last_candle["RSI_3_15m"] > 10.0)
         and (last_candle["RSI_3_1h"] > 10.0)
         and (last_candle["RSI_3_4h"] > 10.0)
+        and (last_candle["RSI_14"] < 35.0)
         and (last_candle["AROONU_14"] < 25.0)
-        and (last_candle["close"] < (last_candle["low_min_12_4h"] * 1.30))
+        and (last_candle["ROC_9_4h"] > -20.0)
+        and (last_candle["close"] < (last_candle["low_min_12_4h"] * 1.50))
         and (last_candle["close"] < (last_candle["EMA_9"] * 0.975))
         and (last_candle["close"] < (last_candle["EMA_20"] * 0.970))
       )
       or (
-        (last_candle["RSI_14"] > 35.0)
-        and (last_candle["RSI_3"] > 10.0)
+        (last_candle["RSI_3"] > 10.0)
         and (last_candle["RSI_3"] < 40.0)
         and (last_candle["RSI_3_15m"] > 15.0)
-        and (last_candle["ROC_2_1h"] > -10.0)
-        and (last_candle["ROC_2_4h"] > -10.0)
-        and (last_candle["ROC_9_1h"] > -10.0)
-        and (last_candle["ROC_9_4h"] > -10.0)
+        and (last_candle["RSI_14"] > 35.0)
+        and (last_candle["ROC_9_1h"] > -20.0)
+        and (last_candle["ROC_9_4h"] > -20.0)
         and (last_candle["AROONU_14"] < 25.0)
         and (last_candle["close"] < (last_candle["low_min_12_4h"] * 1.60))
         and (last_candle["RSI_20"] < previous_candle["RSI_20"])
@@ -47493,10 +47520,8 @@ class NostalgiaForInfinityX7(IStrategy):
         and (last_candle["RSI_3_15m"] > 10.0)
         and (last_candle["RSI_3_1h"] > 10.0)
         and (last_candle["RSI_3_4h"] > 10.0)
-        and (last_candle["ROC_2_1h"] > -5.0)
-        and (last_candle["ROC_2_4h"] > -5.0)
-        and (last_candle["ROC_9_1h"] > -5.0)
-        and (last_candle["ROC_9_4h"] > -5.0)
+        and (last_candle["ROC_9_1h"] > -10.0)
+        and (last_candle["ROC_9_4h"] > -10.0)
         and (last_candle["WILLR_14"] < -50.0)
         and (last_candle["STOCHRSIk_14_14_3_3"] < 20.0)
         and (last_candle["WILLR_84_1h"] < -70.0)
@@ -47507,7 +47532,7 @@ class NostalgiaForInfinityX7(IStrategy):
       or (
         (last_candle["RSI_3"] < 30.0)
         and (last_candle["RSI_3"] > 5.0)
-        and (last_candle["RSI_3_15m"] > 5.0)
+        and (last_candle["RSI_3_15m"] > 10.0)
         and (last_candle["RSI_3_1h"] > 10.0)
         and (last_candle["RSI_3_4h"] > 10.0)
         and (last_candle["ROC_9_1h"] > -10.0)
@@ -47522,7 +47547,7 @@ class NostalgiaForInfinityX7(IStrategy):
         and (last_candle["RSI_3_15m"] > 25.0)
         and (last_candle["RSI_3_1h"] > 30.0)
         and (last_candle["AROONU_14_4h"] < 70.0)
-        and (last_candle["STOCHRSIk_14_14_3_3"] < 50.0)
+        and (last_candle["STOCHRSIk_14_14_3_3"] < 80.0)
         and (last_candle["close"] < (last_candle["close_max_48"] * 0.90))
         and (last_candle["close"] > (last_candle["close_min_12"] * 1.08))
       )
@@ -47543,11 +47568,11 @@ class NostalgiaForInfinityX7(IStrategy):
         and (last_candle["close"] < (last_candle["BBL_20_2.0"] * 0.999))
       )
       or (
-        (last_candle["RSI_14"] < 36.0)
-        and (last_candle["RSI_3"] > 5.0)
+        (last_candle["RSI_3"] > 5.0)
         and (last_candle["RSI_3_15m"] > 10.0)
         and (last_candle["RSI_3_1h"] > 10.0)
         and (last_candle["RSI_3_4h"] > 10.0)
+        and (last_candle["RSI_14"] < 35.0)
         and (last_candle["STOCHRSIk_14_14_3_3"] < 30.0)
         and (last_candle["close"] > (last_candle["close_max_48"] * 0.90))
         and (last_candle["close"] < (last_candle["low_min_12_4h"] * 1.60))
@@ -47564,6 +47589,12 @@ class NostalgiaForInfinityX7(IStrategy):
         and (last_candle["close"] < (last_candle["EMA_100"] * 0.975))
       )
       or (
+        (last_candle["RSI_3"] > 5.0)
+        and (previous_candle["SMA_9"] < previous_candle["SMA_21"])
+        and (last_candle["SMA_9"] > last_candle["SMA_21"])
+        and (last_candle["EMA_12_4h"] > last_candle["EMA_200_4h"])
+      )
+      or (
         (slice_profit < -0.16)
         and (last_candle["RSI_3"] > 5.0)
         and (last_candle["RSI_3_15m"] > 10.0)
@@ -47576,14 +47607,14 @@ class NostalgiaForInfinityX7(IStrategy):
         and (last_candle["STOCHRSIk_14_14_3_3_15m"] < 30.0)
       )
       or (
-        (last_candle["RSI_14"] < 36.0)
-        and (last_candle["RSI_3"] > 5.0)
+        (last_candle["RSI_3"] > 5.0)
         and (last_candle["RSI_3_15m"] > 15.0)
         and (last_candle["RSI_3_1h"] > 15.0)
         and (last_candle["RSI_3_4h"] > 15.0)
+        and (last_candle["RSI_14"] < 35.0)
         and (last_candle["ROC_9_1h"] > -20.0)
         and (last_candle["ROC_9_4h"] > -25.0)
-        and (last_candle["close"] < (last_candle["EMA_12"] * 0.970))
+        and (last_candle["close"] < (last_candle["EMA_12"] * 0.965))
         and (last_candle["close"] < (last_candle["BBL_20_2.0"] * 0.999))
       )
       or (
@@ -47596,7 +47627,7 @@ class NostalgiaForInfinityX7(IStrategy):
         and (last_candle["close"] < (last_candle["EMA_20"] * 0.985))
       )
       or (
-        (slice_profit < -0.02)
+        (slice_profit < -0.04)
         and (last_candle["RSI_3"] > 5.0)
         and (last_candle["RSI_3_15m"] > 15.0)
         and (last_candle["RSI_3_1h"] > 20.0)
@@ -47606,12 +47637,12 @@ class NostalgiaForInfinityX7(IStrategy):
         and (last_candle["close"] < (last_candle["BBL_20_2.0"] * 0.999))
       )
       or (
-        (slice_profit < -0.16)
+        (slice_profit < -0.12)
         and (last_candle["RSI_3"] < 30.0)
         and (last_candle["RSI_3"] > 5.0)
         and (last_candle["RSI_3_15m"] > 10.0)
         and (last_candle["EMA_26"] > last_candle["EMA_12"])
-        and ((last_candle["EMA_26"] - last_candle["EMA_12"]) > (last_candle["open"] * 0.025))
+        and ((last_candle["EMA_26"] - last_candle["EMA_12"]) > (last_candle["open"] * 0.030))
         and ((previous_candle["EMA_26"] - previous_candle["EMA_12"]) > (last_candle["open"] / 100.0))
       )
     ):

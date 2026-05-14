@@ -1278,6 +1278,8 @@ class TestX7EntryLogicMixin:
             & ((_cmp_cached_47) | (_cmp_cached_12) | (_cmp_cached_40))
             # 4h down move, 4h & 1d downtrend
             & ((_cmp_cached_47) | (_cmp_cached_20) | (_cmp_cached_9))
+            # 4h down move, 4h still high, 1d overbought
+            & ((_cmp_cached_47) | (_cmp_cached_79) | (_cmp_cached_35))
             # 4h down move, 4h high, 1d downtrend
             & ((_cmp_cached_47) | (_cmp_cached_58) | (_cmp_cached_146))
             # 4h down move, 1d high & overbought
@@ -1525,6 +1527,8 @@ class TestX7EntryLogicMixin:
             & ((_cmp_cached_16) | (_cmp_cached_90) | (_cmp_cached_27))
             # 15m down move, 15m high, 4h overbought
             & ((_cmp_cached_16) | (_cmp_cached_24) | (_cmp_cached_26))
+            # 15m down move, 15m high, 4h downtrend
+            & ((_cmp_cached_16) | (_cmp_cached_24) | (_cmp_cached_102))
             # 15m down move, 15m high, 1d downtrend
             & ((_cmp_cached_16) | (_cmp_cached_24) | (_cmp_cached_15))
             # 15m down move, 15m high, 1d overbought
@@ -2599,7 +2603,7 @@ class TestX7EntryLogicMixin:
             # 4h down move, 4h still high, 1d downtrend
             & ((_cmp_cached_4) | (_cmp_cached_79) | (_cmp_cached_15))
             # 4h down move, 4h downtrend, 1d overbought
-            & ((_cmp_cached_4) | (_cmp_cached_72) | (_cmp_cached_40))
+            & ((_cmp_cached_4) | (_cmp_cached_31) | (_cmp_cached_40))
             # 4h & 1d down move, 4h downtrend
             & ((_cmp_cached_5) | (_cmp_cached_53) | (_cmp_cached_139))
             # 4h down move, 1h high, 1d downtrend
@@ -5821,6 +5825,8 @@ class TestX7EntryLogicMixin:
           long_entry_logic.append((_cmp_cached_1) | (_cmp_cached_93))
           # 1h down move, 1d high & overbought
           long_entry_logic.append((_cmp_cached_1) | (_cmp_cached_45) | (_cmp_cached_35))
+          # 1h down move, 1d overbought
+          long_entry_logic.append((_cmp_cached_1) | (_cmp_cached_29))
           # 1h & 4h down move, 4h still high
           long_entry_logic.append((_cmp_cached_2) | (_cmp_cached_5) | (_cmp_cached_67))
           # 1h & 4h down move, 1d high
@@ -6510,6 +6516,8 @@ class TestX7EntryLogicMixin:
             & ((_cmp_cached_1) | (_cmp_cached_54) | (_cmp_cached_95))
             # 1h down move, 4h downtrend, 1d overbought
             & ((_cmp_cached_1) | (_cmp_cached_102) | (_cmp_cached_40))
+            # 1h down move, 1d overbought
+            & ((_cmp_cached_1) | (_cmp_cached_29))
             # 1h & 4h down move, 4h high
             & ((_cmp_cached_2) | (_cmp_cached_47) | (_cmp_cached_20))
             # 1h down move, 1d downtrend, 1d high
@@ -7226,7 +7234,7 @@ class TestX7EntryLogicMixin:
             # 1h & 4h down move, 4h still not low enough
             & ((_cmp_cached_1) | (_cmp_cached_4) | (_cmp("STOCHRSIk_14_14_3_3_4h", "<", 20.0)))
             # 1h down move, 1d overbought
-            & ((_cmp_cached_1) | (_cmp_cached_74))
+            & ((_cmp_cached_1) | (_cmp_cached_29))
             # 1h & 4h down move, 1h still not low enough
             & ((_cmp_cached_2) | (_cmp_cached_5) | (_cmp_cached_109))
             # 1h & 4h down move, 15m high
@@ -9010,6 +9018,8 @@ class TestX7EntryLogicMixin:
           )
           # 4h down move, 4h still high, 1d overbought
           long_entry_logic.append((_cmp_cached_19) | (_cmp_cached_67) | (_cmp_cached_29))
+          # 4h down move, 4h high, 1h downtrend
+          long_entry_logic.append((_cmp_cached_19) | (_cmp_cached_20) | (_cmp_cached_124))
           # 4h down move, 4h still high, 1d overbought
           long_entry_logic.append((_cmp_cached_41) | (_cmp_cached_43) | (_cmp_cached_40))
           # 4h down move, 4h still high, 1d high
@@ -11552,7 +11562,7 @@ class TestX7EntryLogicMixin:
             # 4h down move, 4h still high, 1d downtrend
             & ((_cmp_cached_60) | (_cmp_cached_110) | (_cmp_cached_23))
             # 4h down move, 4h high & overbought
-            & ((_cmp_cached_60) | (_cmp_cached_93) | (_cmp_cached_27))
+            & ((_cmp_cached_60) | (_cmp_cached_13) | (_cmp_cached_27))
             # 4h down move, 15m still high, 1d overbought
             & ((_cmp_cached_131) | (_cmp_cached_81) | (_cmp_cached_29))
             # 4h & 1d down move, 4h high, 1d overbought
