@@ -176,3 +176,43 @@ The strongest completed evidence so far:
 This is still not a full proof. Before calling the change fully proven, the next
 step should be a longer backtest parity run, ideally the full 80-pair timerange
 used by the prior TestX7 proof package.
+
+## Handoff Summary
+
+What happened in this pass:
+
+- A maintainer-provided local X7 file was reviewed as a private comparison
+  input.
+- The provided strategy file itself was not committed or uploaded.
+- The comparison was intentionally done against official upstream `v17.4.90`,
+  not against the current public TestX7 proof baseline at `v17.4.83`.
+- The public artifact from this pass is this report only.
+- The report was pushed in commit
+  `8f7861d Add X7 v17.4.90 fragmentation comparison report`.
+
+Current interpretation:
+
+- The change is worth tracking because it attacks dataframe fragmentation in the
+  same area that appears expensive during `populate_indicators`.
+- The measured improvement is modest, not a large TestX7-style speedup.
+- The short fingerprint and backtest canary checks did not show a behavior
+  mismatch.
+- The evidence is strong enough to justify more testing, but not strong enough
+  to call the change fully proven.
+
+Current boundary:
+
+- Do not port this directly into TestX7 yet.
+- Do not publish the maintainer-provided strategy file.
+- Do not present this as a production-ready strategy change.
+- Keep the claim narrow: same-version local comparison, modest runtime
+  improvement, no mismatch found in the completed checks.
+
+Useful next actions:
+
+1. If the maintainer asks for more evidence, run a longer/full 80-pair backtest
+   parity comparison against official upstream `v17.4.90`.
+2. If a newer X7 version becomes the active target, redo this comparison against
+   that exact same version.
+3. If this pattern is later considered for TestX7, rebase TestX7 first, then
+   port the anti-fragmentation pattern as a separate parity-protected change.
