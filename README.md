@@ -24,6 +24,33 @@ Latest rebase check:
 
 ## English
 
+### How To Try TestX7
+
+`TestX7` is experimental. Start with backtesting or dry-run before any live use.
+
+Copy these files from this repository into your Freqtrade
+`user_data/strategies/` folder:
+
+- `user_data/strategies/TestX7.py`
+- `user_data/strategies/NostalgiaForInfinityX7.py`
+- `user_data/strategies/test_x7_modules/`
+
+Then set your Freqtrade strategy to:
+
+```json
+"strategy": "TestX7"
+```
+
+To use the live-loop speed optimization, `TestX7.py` must be used together
+with the matching `test_x7_modules/` folder and worker/config settings such as
+`test_x7_stable_process_analyze_workers`.
+
+If you run the original iterativ strategy file directly, it uses the original
+strategy path, so the `TestX7` multi-process/caching acceleration is not active.
+
+This repository currently publishes the optimized proof package as `TestX7`.
+There is no separate optimized `TestX6.py` package here.
+
 ### Result At A Glance
 
 The upstream `NostalgiaForInfinityX7.py` strategy is kept as the baseline.
@@ -231,6 +258,34 @@ Backtest 관련 추가 문서:
 > 검증된 X7 매매 판단은 그대로 유지하고, 많은 pair를 돌릴 때 느려지는 live 분석 루프를 크게 줄인다.
 
 로컬 검증 기준으로 이 목표는 통과했습니다.
+
+### TestX7 사용해보기
+
+`TestX7`는 아직 실험용입니다. live 사용 전에는 backtest 또는 dry-run부터
+시작하는 것을 권장합니다.
+
+이 저장소에서 아래 파일과 폴더를 Freqtrade의 `user_data/strategies/` 폴더로
+복사합니다.
+
+- `user_data/strategies/TestX7.py`
+- `user_data/strategies/NostalgiaForInfinityX7.py`
+- `user_data/strategies/test_x7_modules/`
+
+그 다음 Freqtrade 전략을 아래처럼 지정합니다.
+
+```json
+"strategy": "TestX7"
+```
+
+live-loop 속도 최적화를 쓰려면 `TestX7.py`와 같은 버전의
+`test_x7_modules/` 폴더, 그리고 `test_x7_stable_process_analyze_workers`
+같은 worker/config 설정을 함께 사용해야 합니다.
+
+iterativ 원본 전략 파일을 직접 실행하면 원본 전략 경로를 사용하므로
+`TestX7`의 multi-process/cache 가속은 활성화되지 않습니다.
+
+현재 이 저장소의 최적화 proof package는 `TestX7`입니다. 별도의 최적화된
+`TestX6.py` 패키지는 이 저장소에 없습니다.
 
 ### 결과 먼저 보기
 
