@@ -1,7 +1,11 @@
 # NFI X7 Optimization Proof Package
 
-This repository is a local proof package for `TestX7`, an optimized fork of
-`NostalgiaForInfinityX7`.
+This repository is a local proof package for `TestX7`, an optimized fork built
+on top of the original `NostalgiaForInfinityX7` strategy from
+[iterativv/NostalgiaForInfinity](https://github.com/iterativv/NostalgiaForInfinity).
+
+The original X7 strategy remains the baseline. `TestX7` is the performance
+proof layer on top: same checked trading surface, faster live pair analysis.
 
 The work was not aimed at improving the profit curve. The goal was narrower:
 
@@ -254,6 +258,10 @@ Backtest 관련 추가 문서:
 ### 한 줄 요약
 
 `TestX7`는 NFI X7의 수익률을 높이려고 만든 튜닝판이 아닙니다. 목표는 더 좁고 명확했습니다.
+
+이 작업은 [iterativv/NostalgiaForInfinity](https://github.com/iterativv/NostalgiaForInfinity)의
+원본 `NostalgiaForInfinityX7`를 기반으로 한 성능 proof package입니다. 원본 X7을 기준본으로
+두고, `TestX7`는 같은 매매 판단을 더 빠르게 계산하는 별도 최적화 레이어로 만들었습니다.
 
 > 검증된 X7 매매 판단은 그대로 유지하고, 많은 pair를 돌릴 때 느려지는 live 분석 루프를 크게 줄인다.
 
