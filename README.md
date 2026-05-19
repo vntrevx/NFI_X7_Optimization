@@ -269,28 +269,41 @@ Backtest 관련 추가 문서:
 
 ### TestX7 사용해보기
 
-`TestX7`는 아직 실험용입니다. live 사용 전에는 backtest 또는 dry-run부터
-시작하는 것을 권장합니다.
+`TestX7`는 아직 실험용입니다. live에 바로 넣기보다는 backtest 또는
+dry-run으로 먼저 확인하는 것을 권장합니다.
 
-이 저장소에서 아래 파일과 폴더를 Freqtrade의 `user_data/strategies/` 폴더로
-복사합니다.
+설치 방법은 단순합니다. 이 저장소의 아래 파일과 폴더를 본인 Freqtrade
+환경의 `user_data/strategies/` 폴더로 복사합니다.
 
 - `user_data/strategies/TestX7.py`
 - `user_data/strategies/NostalgiaForInfinityX7.py`
 - `user_data/strategies/test_x7_modules/`
 
-그 다음 Freqtrade 전략을 아래처럼 지정합니다.
+복사 후 본인 Freqtrade 폴더에서는 아래처럼 보여야 합니다.
+
+```text
+user_data/
+  strategies/
+    TestX7.py
+    NostalgiaForInfinityX7.py
+    test_x7_modules/
+```
+
+그 다음 config에서 Freqtrade 전략을 아래처럼 지정합니다.
 
 ```json
 "strategy": "TestX7"
 ```
 
-live-loop 속도 최적화를 쓰려면 `TestX7.py`와 같은 버전의
-`test_x7_modules/` 폴더, 그리고 `test_x7_stable_process_analyze_workers`
-같은 worker/config 설정을 함께 사용해야 합니다.
+live-loop 속도 최적화를 쓰려면 `TestX7.py`와 같은 버전의 `test_x7_modules/`
+폴더를 반드시 함께 넣어야 합니다. worker 설정은 환경에 따라 다르지만,
+이 proof package에서 쓰는 대표 설정은 `test_x7_stable_process_analyze_workers`
+입니다.
 
-iterativ 원본 전략 파일을 직접 실행하면 원본 전략 경로를 사용하므로
-`TestX7`의 multi-process/cache 가속은 활성화되지 않습니다.
+`TestX7.py`만 복사하거나 `test_x7_modules/` 폴더를 빼먹으면 import가
+실패하거나 최적화 경로가 제대로 동작하지 않습니다. iterativ 원본 전략
+파일을 직접 실행하면 원본 전략 경로를 사용하므로 `TestX7`의
+multi-process/cache 가속은 활성화되지 않습니다.
 
 현재 이 저장소의 최적화 proof package는 `TestX7`입니다. 별도의 최적화된
 `TestX6.py` 패키지는 이 저장소에 없습니다.
