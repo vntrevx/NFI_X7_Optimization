@@ -28,8 +28,12 @@ Latest rebase check:
 
 ## English
 
-If you are interested in this proof package, or if you want to help test or
-review it, feel free to send me a DM on Discord: `ho_00001`.
+### Open Collaboration
+
+> Interested in testing `TestX7`, reviewing the optimization path, or helping
+> harden this proof package on another setup?
+>
+> Discord DM: `ho_00001`
 
 ### How To Try TestX7
 
@@ -258,8 +262,12 @@ Backtest 관련 추가 문서:
 최신 rebase 검증:
 [docs/testx7-v17483-rebase-report.md](docs/testx7-v17483-rebase-report.md).
 
-이 proof package에 관심이 있거나 테스트/리뷰로 도움을 주고 싶다면
-Discord `ho_00001`로 DM 주세요.
+### 같이 검증해보고 싶다면
+
+> `TestX7`를 다른 환경에서 테스트해보거나, 최적화 경로를 리뷰하거나,
+> proof package를 더 단단하게 만드는 데 도움을 주고 싶다면 편하게 연락 주세요.
+>
+> Discord DM: `ho_00001`
 
 ### 한 줄 요약
 
