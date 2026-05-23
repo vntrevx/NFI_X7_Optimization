@@ -10,6 +10,34 @@
 bundle을 사용하세요. 이 repo 루트의 `user_data/strategies`를 그대로 쓰면
 안 됩니다. 설치용 v17.4.109 전략 파일은 release bundle 안에 있습니다.
 
+## 가장 쉬운 설치 방법
+
+아래처럼 설치 스크립트를 받은 뒤, 본인 Freqtrade 폴더만 넘기면 됩니다.
+
+```bash
+cd /tmp
+curl -L -O \
+  https://raw.githubusercontent.com/vntrevx/NFI_X7_Optimization/main/tuning/x7-v174109-rescue-short641/release/install-testx7-v174109.sh
+chmod +x install-testx7-v174109.sh
+./install-testx7-v174109.sh /path/to/freqtrade
+```
+
+`/path/to/freqtrade`는 본인 Freqtrade checkout 경로로 바꾸세요. 예를 들면:
+
+```bash
+./install-testx7-v174109.sh ~/freqtrade
+```
+
+스크립트가 하는 일은 네 가지입니다.
+
+- 공개 설치 번들 다운로드
+- sha256 자동 확인
+- 임시 폴더에 압축 해제
+- `user_data` 파일을 Freqtrade checkout으로 복사
+
+기존 파일이 덮어써질 경우 `user_data/testx7-v174109-backup-*` 아래에
+백업됩니다.
+
 ## 번들 포함 파일
 
 번들은 `user_data` 전략/설정 파일만 포함합니다.
@@ -24,9 +52,10 @@ bundle을 사용하세요. 이 repo 루트의 `user_data/strategies`를 그대�
 
 거래소 credential, live bot 상태, DB, backtest archive는 포함하지 않습니다.
 
-## 안전 설치 순서
+## 수동 설치 방법
 
-먼저 live bot이 아니라 깨끗한 테스트용 Freqtrade checkout에서 실행하세요.
+스크립트를 쓰기 싫다면 아래처럼 수동으로 설치해도 됩니다. 먼저 live bot이
+아니라 깨끗한 테스트용 Freqtrade checkout에서 실행하세요.
 
 ```bash
 curl -L \
@@ -73,10 +102,12 @@ rsync -av /tmp/testx7-v174109-install-preview/user_data/ /path/to/freqtrade/user
 Freqtrade checkout에서 로컬 Docker 로드 체크를 실행하세요.
 
 ```bash
+CANDIDATE="$(basename "$(ls user_data/config-x7-futures3x-prodage-v2-risk-topmode-*.example.json | head -n 1)")"
+
 docker compose run --rm freqtrade list-strategies \
   --userdir /freqtrade/user_data \
   --config /freqtrade/user_data/config-x7-futures3x-80pairs.example.json \
-  --config /freqtrade/user_data/config-x7-futures3x-prodage-v2-risk-topmode-xplzen-v1-blockxpl142-zencap10-topmode-safeexpand-not142block-short641-tailblock-cap4-v1-no-fresh-top3-nousual-sui641block-h2tailfix-v3-maxopen4-blocklong44all-ondo63-v1.example.json \
+  --config "/freqtrade/user_data/$CANDIDATE" \
   --config /freqtrade/user_data/config-test-x7-live-speed-safe.example.json \
   --config /freqtrade/user_data/config-x7-v174109-rescue-short641-paper-overlay.example.json
 ```

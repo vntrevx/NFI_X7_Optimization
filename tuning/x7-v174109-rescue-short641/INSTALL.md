@@ -11,6 +11,34 @@ package in a Freqtrade user directory. Do not use the repository root
 `user_data/strategies` folder for this package; the installable v17.4.109
 strategy files are inside the release bundle.
 
+## Easiest Install
+
+Download the installer script and pass your local Freqtrade checkout path:
+
+```bash
+cd /tmp
+curl -L -O \
+  https://raw.githubusercontent.com/vntrevx/NFI_X7_Optimization/main/tuning/x7-v174109-rescue-short641/release/install-testx7-v174109.sh
+chmod +x install-testx7-v174109.sh
+./install-testx7-v174109.sh /path/to/freqtrade
+```
+
+Replace `/path/to/freqtrade` with your own Freqtrade checkout, for example:
+
+```bash
+./install-testx7-v174109.sh ~/freqtrade
+```
+
+The script does four things:
+
+- downloads the public install bundle
+- verifies the sha256
+- extracts it into a temporary directory
+- copies the `user_data` files into your Freqtrade checkout
+
+If existing files are overwritten, they are backed up under
+`user_data/testx7-v174109-backup-*`.
+
 ## What The Bundle Contains
 
 The bundle contains only `user_data` strategy/config files:
@@ -26,9 +54,10 @@ The bundle contains only `user_data` strategy/config files:
 It does not include exchange credentials, live bot state, database files, or
 backtest archives.
 
-## Install Safely
+## Manual Install
 
-Run this in a clean test Freqtrade checkout first, not on a live bot.
+If you do not want to use the installer script, install manually. Run this in a
+clean test Freqtrade checkout first, not on a live bot.
 
 ```bash
 curl -L \
@@ -76,10 +105,12 @@ Replace `/path/to/freqtrade` with your own Freqtrade project path.
 From your Freqtrade checkout, run a local Docker strategy-load check:
 
 ```bash
+CANDIDATE="$(basename "$(ls user_data/config-x7-futures3x-prodage-v2-risk-topmode-*.example.json | head -n 1)")"
+
 docker compose run --rm freqtrade list-strategies \
   --userdir /freqtrade/user_data \
   --config /freqtrade/user_data/config-x7-futures3x-80pairs.example.json \
-  --config /freqtrade/user_data/config-x7-futures3x-prodage-v2-risk-topmode-xplzen-v1-blockxpl142-zencap10-topmode-safeexpand-not142block-short641-tailblock-cap4-v1-no-fresh-top3-nousual-sui641block-h2tailfix-v3-maxopen4-blocklong44all-ondo63-v1.example.json \
+  --config "/freqtrade/user_data/$CANDIDATE" \
   --config /freqtrade/user_data/config-test-x7-live-speed-safe.example.json \
   --config /freqtrade/user_data/config-x7-v174109-rescue-short641-paper-overlay.example.json
 ```

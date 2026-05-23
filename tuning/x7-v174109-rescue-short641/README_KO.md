@@ -50,5 +50,7 @@ upstream과 완전히 byte-identical 하지는 않았습니다.
 - `docs/effectiveness-retrospective.md` - 이번 작업의 효과 정리
 - `docs/upstream-baseline-note.md` - upstream 버전 및 로컬 차이
 - `evidence/local-status.json` - 로컬 상태 JSON 스냅샷
+- `release/install-testx7-v174109.sh` - 로컬 Freqtrade checkout에 설치하는
+  가장 쉬운 installer
 - `release/testx7-v174109-rescue-short641-install-20260523.tar.gz` - 검증된
   v17.4.109 전략/설정 파일만 담은 sanitized 설치 번들

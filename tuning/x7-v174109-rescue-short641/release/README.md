@@ -1,5 +1,12 @@
 # Release Bundle
 
+`install-testx7-v174109.sh` is the easiest installer. Download it, inspect it if
+needed, then run:
+
+```bash
+./install-testx7-v174109.sh /path/to/freqtrade
+```
+
 `testx7-v174109-rescue-short641-install-20260523.tar.gz` is the sanitized
 install bundle for this research package.
 

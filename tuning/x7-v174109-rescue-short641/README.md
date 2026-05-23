@@ -49,6 +49,8 @@ That boundary is documented in `docs/upstream-baseline-note.md`.
 - `docs/effectiveness-retrospective.md` - what the tuning work improved
 - `docs/upstream-baseline-note.md` - upstream version and local-diff note
 - `evidence/local-status.json` - machine-readable local status snapshot
+- `release/install-testx7-v174109.sh` - easiest installer for a local
+  Freqtrade checkout
 - `release/testx7-v174109-rescue-short641-install-20260523.tar.gz` - sanitized
   install bundle with the checked v17.4.109 strategy/config files
 
