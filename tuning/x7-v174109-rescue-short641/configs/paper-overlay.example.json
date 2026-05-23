@@ -1,0 +1,19 @@
+{
+  "$schema": "https://schema.freqtrade.io/schema.json",
+  "strategy": "TestX7",
+  "dry_run": true,
+  "dry_run_wallet": 1000,
+  "trading_mode": "futures",
+  "margin_mode": "isolated",
+  "stake_currency": "USDT",
+  "stake_amount": 100,
+  "max_open_trades": 4,
+  "tradable_balance_ratio": 0.99,
+  "initial_state": "running",
+  "force_entry_enable": false,
+  "cancel_open_orders_on_exit": false,
+  "bot_name": "testx7-v174109-rescue-paper",
+  "internals": {
+    "process_throttle_secs": 5
+  }
+}
