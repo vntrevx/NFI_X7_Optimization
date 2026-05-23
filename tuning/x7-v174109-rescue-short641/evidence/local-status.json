@@ -1,0 +1,137 @@
+{
+  "candidate": "rescue-short641-paramkeys-v1",
+  "date": "2026-05-23",
+  "deployment": {
+    "live_host_no_touch": true,
+    "live_server_deployed": false,
+    "paper_or_canary_started": false,
+    "remote_cleanup_authorized": false
+  },
+  "documents": {
+    "deliverables_index": "docs/x7-v174109-local-deliverables-2026-05-23.json",
+    "final_local_audit": "docs/x7-v174109-final-local-audit-2026-05-23.md",
+    "live_ops_handoff": "docs/x7-v174109-live-ops-handoff-2026-05-23.md",
+    "risk_audit": "docs/x7-v174109-rescue-risk-audit-2026-05-23.md",
+    "start_here": "docs/x7-v174109-start-here-2026-05-23.md",
+    "transfer_manifest": "docs/x7-v174109-live-transfer-manifest-2026-05-23.json",
+    "transfer_readiness": "docs/x7-v174109-live-transfer-readiness-2026-05-23.md"
+  },
+  "deliverables_verification": {
+    "items_ok": 23,
+    "items_total": 23,
+    "required_path_role_set": "ok",
+    "self_excluded_path": "docs/x7-v174109-local-deliverables-2026-05-23.json",
+    "status": "ok"
+  },
+  "evidence": {
+    "promotion_gate": "user_data/backtest_results/x7_v174109_tuning/rescue-short641-paramkeys-v1-production-promotion-gate-v174109.json",
+    "scorecard": "user_data/backtest_results/x7_v174109_tuning/v174109-live-readiness-scorecard-20260523.json",
+    "speed_gate": "user_data/backtest_results/x7_v174109_tuning/rescue-short641-paramkeys-v1-speed-debug/testx7-live-loop-80pairs-40loops-workers9-20260523-044040.txt"
+  },
+  "local_verification": {
+    "archive_files_ok": 25,
+    "archive_files_total": 25,
+    "archive_config_checks_ok": 19,
+    "archive_config_checks_total": 19,
+    "archive_credential_files_ok": 4,
+    "archive_credential_files_total": 4,
+    "archive_document_snippets_ok": 3,
+    "archive_document_snippets_total": 3,
+    "archive_source_hashes_ok": 21,
+    "archive_source_hashes_total": 21,
+    "bundle_files": 25,
+    "bundle_sha256": "b1cd1b690757b76ab43cc6a371b57be0f572751e480cae7f9324b037540f73fb",
+    "config_checks_ok": 19,
+    "config_checks_total": 19,
+    "credential_files_ok": 4,
+    "credential_files_total": 4,
+    "files_ok": 25,
+    "files_total": 25,
+    "no_touch_timeout_seconds": 20,
+    "one_command": "tools/x7_tuning/verify_v174109_local_handoff.sh",
+    "reproducible_bundle_ok": true,
+    "source_hashes_ok": 21,
+    "source_hashes_total": 21,
+    "status": "ok"
+  },
+  "full_local_verification": {
+    "expected_docker_tests": 337,
+    "expected_targeted_tests": 258,
+    "one_command": "tools/x7_tuning/verify_v174109_full_local.sh",
+    "status": "ok"
+  },
+  "runtime_verification": {
+    "docker_strategy_load": {
+      "command": "bash tools/x7_tuning/verify_v174109_docker_load.sh",
+      "effective_config_status": "OK",
+      "freqtrade_version": "2026.4",
+      "status": "ok",
+      "strategy": "TestX7",
+      "strategy_status": "OK"
+    }
+  },
+  "test_verification": {
+    "docker_unittest_discovery": {
+      "command": "docker compose run --rm --entrypoint sh -v \"$PWD:/workspace\" freqtrade -lc \"cd /workspace && PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -p 'test*.py'\"",
+      "status": "ok",
+      "tests_run": 337
+    },
+    "raw_python_unittest_discovery": {
+      "failing_test": "tests/x7_tuning/test_x7_fast_merge.py",
+      "missing_dependency": "pandas",
+      "status": "blocked_by_missing_dependency"
+    },
+    "ruff": {
+      "status": "ok"
+    },
+    "targeted_raw_python_tests": {
+      "status": "ok",
+      "tests_run": 258
+    }
+  },
+  "promotion_summary": {
+    "failed_rules": [],
+    "fresh_oos_profit_pct": 25.906538,
+    "fresh_oos_timerange": "20260101-20260520",
+    "fresh_oos_trades": 54,
+    "full_profit_pct": 191.866939,
+    "full_timerange": "20250616-20260520",
+    "full_trades": 269,
+    "passed": true,
+    "promotable": true,
+    "risk_level": "low"
+  },
+  "scorecard_summary": {
+    "current_candidate_score": 21.541585,
+    "old_final_v17496_score": 20.395516,
+    "rank11_live_final_promotable": false,
+    "v174109_refresh_promotable": false,
+    "winner": "v174109-rescue-short641-paramkeys"
+  },
+  "speed_gate_summary": {
+    "average_loop_seconds": 2.924533,
+    "gate": "PASS",
+    "loops": 40,
+    "max_loop_seconds": 3.882162,
+    "over_5_seconds": 0,
+    "pairs": 80,
+    "workers": 9
+  },
+  "target_runtime_surface": {
+    "bot_name": "testx7-v174109-rescue-paper",
+    "cancel_open_orders_on_exit": false,
+    "dry_run": true,
+    "dry_run_wallet": 1000,
+    "force_entry_enable": false,
+    "initial_state": "running",
+    "margin_mode": "isolated",
+    "max_open_trades": 4,
+    "process_throttle_secs": 5,
+    "stake_amount": 100,
+    "stake_currency": "USDT",
+    "static_pair_whitelist_count": 76,
+    "strategy": "TestX7",
+    "tradable_balance_ratio": 0.99,
+    "trading_mode": "futures"
+  }
+}

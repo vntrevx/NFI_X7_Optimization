@@ -1,0 +1,544 @@
+{
+  "$schema": "https://schema.freqtrade.io/schema.json",
+  "max_open_trades": 4,
+  "exchange": {
+    "pair_whitelist": [
+      "ZEC/USDT:USDT",
+      "DASH/USDT:USDT",
+      "FIL/USDT:USDT",
+      "GIGGLE/USDT:USDT",
+      "XPL/USDT:USDT",
+      "NEAR/USDT:USDT",
+      "ONDO/USDT:USDT",
+      "EIGEN/USDT:USDT",
+      "LTC/USDT:USDT",
+      "RENDER/USDT:USDT",
+      "TIA/USDT:USDT",
+      "ICP/USDT:USDT",
+      "ZEN/USDT:USDT",
+      "APT/USDT:USDT",
+      "DOGE/USDT:USDT",
+      "DYDX/USDT:USDT",
+      "UNI/USDT:USDT",
+      "SOL/USDT:USDT",
+      "AVAX/USDT:USDT",
+      "USUAL/USDT:USDT",
+      "SEI/USDT:USDT",
+      "INJ/USDT:USDT",
+      "ASTER/USDT:USDT",
+      "HBAR/USDT:USDT",
+      "MOVR/USDT:USDT",
+      "SUI/USDT:USDT",
+      "BCH/USDT:USDT",
+      "ARB/USDT:USDT",
+      "ADA/USDT:USDT",
+      "XLM/USDT:USDT",
+      "1000PEPE/USDT:USDT",
+      "RUNE/USDT:USDT",
+      "NOT/USDT:USDT",
+      "ALGO/USDT:USDT",
+      "BIO/USDT:USDT",
+      "PENGU/USDT:USDT",
+      "XRP/USDT:USDT",
+      "ETC/USDT:USDT",
+      "S/USDT:USDT",
+      "ATOM/USDT:USDT",
+      "LINK/USDT:USDT",
+      "TRX/USDT:USDT",
+      "ETH/USDT:USDT",
+      "FET/USDT:USDT",
+      "WLD/USDT:USDT",
+      "AAVE/USDT:USDT",
+      "IO/USDT:USDT",
+      "OP/USDT:USDT",
+      "VIRTUAL/USDT:USDT",
+      "SPK/USDT:USDT",
+      "BTC/USDT:USDT",
+      "STRK/USDT:USDT",
+      "ENA/USDT:USDT",
+      "PAXG/USDT:USDT",
+      "JTO/USDT:USDT",
+      "1000LUNC/USDT:USDT",
+      "SAHARA/USDT:USDT",
+      "PENDLE/USDT:USDT",
+      "1000BONK/USDT:USDT",
+      "DOT/USDT:USDT",
+      "D/USDT:USDT",
+      "1000SHIB/USDT:USDT",
+      "ZK/USDT:USDT",
+      "VANA/USDT:USDT",
+      "1000FLOKI/USDT:USDT",
+      "ETHFI/USDT:USDT",
+      "HMSTR/USDT:USDT",
+      "ORCA/USDT:USDT",
+      "ZRO/USDT:USDT",
+      "POL/USDT:USDT",
+      "LINEA/USDT:USDT",
+      "COMP/USDT:USDT",
+      "ACH/USDT:USDT",
+      "ZBT/USDT:USDT",
+      "STORJ/USDT:USDT",
+      "APE/USDT:USDT"
+    ],
+    "pair_blacklist": [
+      "(BNB)/.*",
+      ".*(_PREMIUM|BEAR|BULL|HALF|HEDGE|UP|DOWN|[1235][SL])/.*",
+      "PUMP/USDT:USDT",
+      "TON/USDT:USDT",
+      "GALA/USDT:USDT",
+      "TAO/USDT:USDT",
+      "BIO/USDT:USDT",
+      "APE/USDT:USDT",
+      "NOT/USDT:USDT",
+      "USUAL/USDT:USDT"
+    ]
+  },
+  "nfi_parameters": {
+    "test_x7_long_grind_exit_pair_thresholds": {
+      "RENDER/USDT:USDT": 0.32,
+      "ZEC/USDT:USDT": 0.18,
+      "INJ/USDT:USDT": 0.18
+    },
+    "grind_mode_coins": [
+      "AAVE",
+      "ADA",
+      "ALGO",
+      "APE",
+      "APT",
+      "ARB",
+      "ATOM",
+      "AVAX",
+      "BCH",
+      "BNB",
+      "BTC",
+      "CAKE",
+      "CRV",
+      "DOGE",
+      "DOT",
+      "DYDX",
+      "ETC",
+      "ETH",
+      "FIL",
+      "GALA",
+      "HBAR",
+      "HYPE",
+      "INJ",
+      "IOTA",
+      "JUP",
+      "KAS",
+      "LDO",
+      "LINK",
+      "LTC",
+      "NEAR",
+      "NEO",
+      "OP",
+      "POL",
+      "RENDER",
+      "RUNE",
+      "SAND",
+      "SEI",
+      "SUI",
+      "THETA",
+      "TIA",
+      "TON",
+      "TRX",
+      "UNI",
+      "VET",
+      "XLM",
+      "XMR",
+      "XRP",
+      "XTZ",
+      "ZEC"
+    ],
+    "test_x7_long_grind_age_exit_pair_rules": {
+      "ZEC/USDT:USDT": {
+        "min_age_days": 7,
+        "min_profit": 0.024
+      },
+      "OP/USDT:USDT": {
+        "min_age_days": 21,
+        "min_profit": 0.024
+      },
+      "TIA/USDT:USDT": {
+        "min_age_days": 21,
+        "min_profit": -0.08
+      },
+      "RENDER/USDT:USDT": {
+        "min_age_days": 29.9,
+        "min_profit": 0.02
+      },
+      "HBAR/USDT:USDT": {
+        "min_age_days": 29.9,
+        "min_profit": 0.024
+      },
+      "ALGO/USDT:USDT": {
+        "min_age_days": 30,
+        "min_profit": 0.024
+      },
+      "RUNE/USDT:USDT": {
+        "min_age_days": 21,
+        "min_profit": 0.024
+      }
+    },
+    "test_x7_block_long_entry_pair_tags": {
+      "APT/USDT:USDT": [
+        "143",
+        "44"
+      ],
+      "GIGGLE/USDT:USDT": [
+        "43",
+        "44"
+      ],
+      "IO/USDT:USDT": [
+        "144",
+        "44"
+      ],
+      "ASTER/USDT:USDT": [
+        "141",
+        "44"
+      ],
+      "1000PEPE/USDT:USDT": [
+        "143",
+        "144",
+        "44"
+      ],
+      "XPL/USDT:USDT": [
+        "142",
+        "44"
+      ],
+      "PENGU/USDT:USDT": [
+        "142",
+        "44"
+      ],
+      "NOT/USDT:USDT": [
+        "142",
+        "44"
+      ],
+      "ZEC/USDT:USDT": [
+        "44"
+      ],
+      "DASH/USDT:USDT": [
+        "44"
+      ],
+      "FIL/USDT:USDT": [
+        "44"
+      ],
+      "NEAR/USDT:USDT": [
+        "44"
+      ],
+      "ONDO/USDT:USDT": [
+        "44",
+        "63"
+      ],
+      "EIGEN/USDT:USDT": [
+        "44"
+      ],
+      "LTC/USDT:USDT": [
+        "44"
+      ],
+      "RENDER/USDT:USDT": [
+        "44"
+      ],
+      "TIA/USDT:USDT": [
+        "44"
+      ],
+      "ICP/USDT:USDT": [
+        "44"
+      ],
+      "ZEN/USDT:USDT": [
+        "44"
+      ],
+      "DOGE/USDT:USDT": [
+        "44"
+      ],
+      "DYDX/USDT:USDT": [
+        "44"
+      ],
+      "UNI/USDT:USDT": [
+        "44"
+      ],
+      "SOL/USDT:USDT": [
+        "44"
+      ],
+      "AVAX/USDT:USDT": [
+        "44"
+      ],
+      "USUAL/USDT:USDT": [
+        "44"
+      ],
+      "SEI/USDT:USDT": [
+        "44"
+      ],
+      "INJ/USDT:USDT": [
+        "44"
+      ],
+      "HBAR/USDT:USDT": [
+        "44"
+      ],
+      "MOVR/USDT:USDT": [
+        "44"
+      ],
+      "SUI/USDT:USDT": [
+        "44"
+      ],
+      "BCH/USDT:USDT": [
+        "44"
+      ],
+      "ARB/USDT:USDT": [
+        "44"
+      ],
+      "ADA/USDT:USDT": [
+        "44"
+      ],
+      "XLM/USDT:USDT": [
+        "44"
+      ],
+      "RUNE/USDT:USDT": [
+        "44"
+      ],
+      "ALGO/USDT:USDT": [
+        "44"
+      ],
+      "BIO/USDT:USDT": [
+        "44"
+      ],
+      "XRP/USDT:USDT": [
+        "44"
+      ],
+      "ETC/USDT:USDT": [
+        "44"
+      ],
+      "S/USDT:USDT": [
+        "44"
+      ],
+      "ATOM/USDT:USDT": [
+        "44"
+      ],
+      "LINK/USDT:USDT": [
+        "44"
+      ],
+      "TRX/USDT:USDT": [
+        "44"
+      ],
+      "ETH/USDT:USDT": [
+        "44"
+      ],
+      "FET/USDT:USDT": [
+        "44"
+      ],
+      "WLD/USDT:USDT": [
+        "44"
+      ],
+      "AAVE/USDT:USDT": [
+        "44"
+      ],
+      "OP/USDT:USDT": [
+        "44"
+      ],
+      "VIRTUAL/USDT:USDT": [
+        "44"
+      ],
+      "SPK/USDT:USDT": [
+        "44"
+      ],
+      "BTC/USDT:USDT": [
+        "44"
+      ],
+      "STRK/USDT:USDT": [
+        "44"
+      ],
+      "ENA/USDT:USDT": [
+        "44"
+      ],
+      "PAXG/USDT:USDT": [
+        "44"
+      ],
+      "JTO/USDT:USDT": [
+        "44"
+      ],
+      "1000LUNC/USDT:USDT": [
+        "44"
+      ],
+      "SAHARA/USDT:USDT": [
+        "44"
+      ],
+      "PENDLE/USDT:USDT": [
+        "44"
+      ],
+      "1000BONK/USDT:USDT": [
+        "44"
+      ],
+      "DOT/USDT:USDT": [
+        "44"
+      ],
+      "D/USDT:USDT": [
+        "44"
+      ],
+      "1000SHIB/USDT:USDT": [
+        "44"
+      ],
+      "ZK/USDT:USDT": [
+        "44"
+      ],
+      "VANA/USDT:USDT": [
+        "44"
+      ],
+      "1000FLOKI/USDT:USDT": [
+        "44"
+      ],
+      "ETHFI/USDT:USDT": [
+        "44"
+      ],
+      "HMSTR/USDT:USDT": [
+        "44"
+      ],
+      "ORCA/USDT:USDT": [
+        "44"
+      ],
+      "ZRO/USDT:USDT": [
+        "44"
+      ],
+      "POL/USDT:USDT": [
+        "44"
+      ],
+      "LINEA/USDT:USDT": [
+        "44"
+      ],
+      "COMP/USDT:USDT": [
+        "44"
+      ],
+      "ACH/USDT:USDT": [
+        "44"
+      ],
+      "ZBT/USDT:USDT": [
+        "44"
+      ],
+      "STORJ/USDT:USDT": [
+        "44"
+      ],
+      "APE/USDT:USDT": [
+        "44"
+      ]
+    },
+    "test_x7_position_entry_depth_pair_caps": {
+      "ZEN/USDT:USDT": 10
+    },
+    "top_coins_mode_coins": [
+      "1INCH",
+      "AAVE",
+      "ADA",
+      "ALGO",
+      "APE",
+      "APT",
+      "ARB",
+      "ATOM",
+      "AVAX",
+      "BCH",
+      "BNB",
+      "BTC",
+      "CAKE",
+      "CRV",
+      "DASH",
+      "DOGE",
+      "DOT",
+      "DYDX",
+      "ETC",
+      "ETH",
+      "FIL",
+      "GALA",
+      "HBAR",
+      "HYPE",
+      "ICP",
+      "INJ",
+      "IOTA",
+      "JUP",
+      "KAS",
+      "LDO",
+      "LINK",
+      "LTC",
+      "NEAR",
+      "NEO",
+      "ONDO",
+      "OP",
+      "POL",
+      "RENDER",
+      "RUNE",
+      "SAND",
+      "SEI",
+      "SOL",
+      "SUI",
+      "THETA",
+      "TIA",
+      "TON",
+      "TRX",
+      "UNI",
+      "VET",
+      "WLD",
+      "XLM",
+      "XMR",
+      "XRP",
+      "XTZ",
+      "ZEC",
+      "XPL",
+      "ZEN",
+      "EIGEN",
+      "S",
+      "USUAL",
+      "PENGU",
+      "ASTER",
+      "1000PEPE",
+      "BIO",
+      "VIRTUAL",
+      "IO",
+      "FET",
+      "NOT"
+    ],
+    "short_entry_signal_params": {
+      "short_entry_condition_641_enable": true
+    },
+    "test_x7_short_entry_depth_cap": 4,
+    "test_x7_block_short_entry_pair_tags": {
+      "AAVE/USDT:USDT": [
+        "641"
+      ],
+      "DASH/USDT:USDT": [
+        "641"
+      ],
+      "FIL/USDT:USDT": [
+        "641"
+      ],
+      "FET/USDT:USDT": [
+        "641"
+      ],
+      "RENDER/USDT:USDT": [
+        "641"
+      ],
+      "S/USDT:USDT": [
+        "641"
+      ],
+      "VIRTUAL/USDT:USDT": [
+        "641"
+      ],
+      "BIO/USDT:USDT": [
+        "641"
+      ],
+      "WLD/USDT:USDT": [
+        "641"
+      ],
+      "XPL/USDT:USDT": [
+        "641"
+      ],
+      "ZEN/USDT:USDT": [
+        "641"
+      ],
+      "SUI/USDT:USDT": [
+        "641"
+      ],
+      "ZEC/USDT:USDT": [
+        "641"
+      ]
+    }
+  },
+  "nfi_advanced_mode": true,
+  "stake_amount": 100
+}
