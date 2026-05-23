@@ -30,10 +30,15 @@ Latest rebase check:
 
 ### Open Collaboration
 
-> Interested in testing `TestX7`, reviewing the optimization path, or helping
-> harden this proof package on another setup?
->
-> Discord DM: `ho_00001`
+<p align="center">
+  <img alt="Discord DM: ho_00001" src="https://img.shields.io/static/v1?label=Discord&message=ho_00001&color=5865F2&style=for-the-badge&logo=discord&logoColor=white">
+</p>
+
+<p align="center">
+  <strong>Testing <code>TestX7</code> on another setup? Reviewing the optimization path?</strong><br>
+  Feedback, parity checks, and hardening help are welcome.<br>
+  Send me a Discord DM: <code>ho_00001</code>
+</p>
 
 ### How To Try TestX7
 
@@ -264,10 +269,15 @@ Backtest 관련 추가 문서:
 
 ### 같이 검증해보고 싶다면
 
-> `TestX7`를 다른 환경에서 테스트해보거나, 최적화 경로를 리뷰하거나,
-> proof package를 더 단단하게 만드는 데 도움을 주고 싶다면 편하게 연락 주세요.
->
-> Discord DM: `ho_00001`
+<p align="center">
+  <img alt="Discord DM: ho_00001" src="https://img.shields.io/static/v1?label=Discord&message=ho_00001&color=5865F2&style=for-the-badge&logo=discord&logoColor=white">
+</p>
+
+<p align="center">
+  <strong><code>TestX7</code>를 다른 환경에서 테스트해보거나 최적화 경로를 리뷰해보고 싶다면</strong><br>
+  parity 확인, 다른 환경 검증, hardening 도움 모두 환영합니다.<br>
+  Discord DM: <code>ho_00001</code>
+</p>
 
 ### 한 줄 요약
 
