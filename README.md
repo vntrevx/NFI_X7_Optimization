@@ -26,6 +26,13 @@ Backtest follow-up documents:
 Latest rebase check:
 [docs/testx7-v17483-rebase-report.md](docs/testx7-v17483-rebase-report.md).
 
+Current v17.4.109 tuning package:
+[tuning/x7-v174109-rescue-short641/README.md](tuning/x7-v174109-rescue-short641/README.md).
+Direct install guide:
+[tuning/x7-v174109-rescue-short641/INSTALL.md](tuning/x7-v174109-rescue-short641/INSTALL.md)
+or
+[tuning/x7-v174109-rescue-short641/INSTALL_KO.md](tuning/x7-v174109-rescue-short641/INSTALL_KO.md).
+
 ## English
 
 ### Open Collaboration
@@ -46,8 +53,14 @@ Latest rebase check:
 
 `TestX7` is experimental. Start with backtesting or dry-run before any live use.
 
-Copy these files from this repository into your Freqtrade
-`user_data/strategies/` folder:
+For the current X7 v17.4.109 tuning package, use the sanitized release bundle
+and follow
+[tuning/x7-v174109-rescue-short641/INSTALL.md](tuning/x7-v174109-rescue-short641/INSTALL.md).
+The repository root `user_data/strategies` folder is not the direct install
+source for that v17.4.109 package.
+
+For the older root proof package, copy these files from this repository into
+your Freqtrade `user_data/strategies/` folder:
 
 - `user_data/strategies/TestX7.py`
 - `user_data/strategies/NostalgiaForInfinityX7.py`
@@ -269,6 +282,11 @@ Backtest 관련 추가 문서:
 최신 rebase 검증:
 [docs/testx7-v17483-rebase-report.md](docs/testx7-v17483-rebase-report.md).
 
+현재 v17.4.109 튜닝 패키지:
+[tuning/x7-v174109-rescue-short641/README_KO.md](tuning/x7-v174109-rescue-short641/README_KO.md).
+직접 설치 가이드:
+[tuning/x7-v174109-rescue-short641/INSTALL_KO.md](tuning/x7-v174109-rescue-short641/INSTALL_KO.md).
+
 ### 같이 검증해보고 싶다면
 
 <p align="center">
@@ -300,8 +318,14 @@ Backtest 관련 추가 문서:
 `TestX7`는 아직 실험용입니다. live에 바로 넣기보다는 backtest 또는
 dry-run으로 먼저 확인하는 것을 권장합니다.
 
-설치 방법은 단순합니다. 이 저장소의 아래 파일과 폴더를 본인 Freqtrade
-환경의 `user_data/strategies/` 폴더로 복사합니다.
+현재 X7 v17.4.109 튜닝 패키지는 sanitized release bundle을 사용하세요.
+설치 순서는
+[tuning/x7-v174109-rescue-short641/INSTALL_KO.md](tuning/x7-v174109-rescue-short641/INSTALL_KO.md)에
+정리되어 있습니다. 이 저장소 루트의 `user_data/strategies` 폴더는
+v17.4.109 패키지의 직접 설치 소스가 아닙니다.
+
+기존 루트 proof package를 테스트할 때는 이 저장소의 아래 파일과 폴더를
+본인 Freqtrade 환경의 `user_data/strategies/` 폴더로 복사합니다.
 
 - `user_data/strategies/TestX7.py`
 - `user_data/strategies/NostalgiaForInfinityX7.py`
