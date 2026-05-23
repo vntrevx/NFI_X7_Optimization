@@ -28,6 +28,9 @@ Latest rebase check:
 
 ## English
 
+If you are interested in this proof package, or if you want to help test or
+review it, feel free to send me a DM on Discord: `ho_00001`.
+
 ### How To Try TestX7
 
 `TestX7` is experimental. Start with backtesting or dry-run before any live use.
@@ -254,6 +257,9 @@ Backtest 관련 추가 문서:
 
 최신 rebase 검증:
 [docs/testx7-v17483-rebase-report.md](docs/testx7-v17483-rebase-report.md).
+
+이 proof package에 관심이 있거나 테스트/리뷰로 도움을 주고 싶다면
+Discord `ho_00001`로 DM 주세요.
 
 ### 한 줄 요약
 
