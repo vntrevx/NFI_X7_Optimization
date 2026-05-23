@@ -1705,6 +1705,19 @@ class NostalgiaForInfinityX7(IStrategy):
 
     return False, None
 
+  # Filled Order Snapshot
+  # ---------------------------------------------------------------------------------------------
+  def filled_order_snapshot(self, trade: "Trade") -> tuple:
+    filled_orders = trade.select_filled_orders()
+    filled_entries = []
+    filled_exits = []
+    for order in filled_orders:
+      if order.ft_order_side == trade.entry_side:
+        filled_entries.append(order)
+      elif order.ft_order_side == trade.exit_side:
+        filled_exits.append(order)
+    return filled_orders, filled_entries, filled_exits
+
   # Calc Total Profit
   # ---------------------------------------------------------------------------------------------
   def calc_total_profit(
@@ -1779,8 +1792,7 @@ class NostalgiaForInfinityX7(IStrategy):
       enter_tag = trade.enter_tag
     enter_tags = enter_tag.split()
 
-    filled_entries = trade.select_filled_orders(trade.entry_side)
-    filled_exits = trade.select_filled_orders(trade.exit_side)
+    _, filled_entries, filled_exits = self.filled_order_snapshot(trade)
 
     profit_stake = 0.0
     profit_ratio = 0.0
@@ -43436,11 +43448,8 @@ class NostalgiaForInfinityX7(IStrategy):
     if trade.has_open_orders:
       return None
 
-    filled_orders = trade.select_filled_orders()
-    filled_entries = trade.select_filled_orders(trade.entry_side)
-    filled_exits = trade.select_filled_orders(trade.exit_side)
-    count_of_entries = trade.nr_of_successful_entries
-    count_of_exits = trade.nr_of_successful_exits
+    filled_orders, filled_entries, filled_exits = self.filled_order_snapshot(trade)
+    count_of_exits = len(filled_exits)
 
     exit_rate = current_rate
     if self.dp.runmode.value in ("live", "dry_run"):
@@ -45846,11 +45855,8 @@ class NostalgiaForInfinityX7(IStrategy):
     if trade.has_open_orders:
       return None
 
-    filled_orders = trade.select_filled_orders()
-    filled_entries = trade.select_filled_orders(trade.entry_side)
-    filled_exits = trade.select_filled_orders(trade.exit_side)
-    count_of_entries = trade.nr_of_successful_entries
-    count_of_exits = trade.nr_of_successful_exits
+    filled_orders, filled_entries, filled_exits = self.filled_order_snapshot(trade)
+    count_of_exits = len(filled_exits)
 
     exit_rate = current_rate
     if self.dp.runmode.value in ("live", "dry_run"):
@@ -47710,11 +47716,9 @@ class NostalgiaForInfinityX7(IStrategy):
     if trade.has_open_orders:
       return None
 
-    filled_orders = trade.select_filled_orders()
-    filled_entries = trade.select_filled_orders(trade.entry_side)
-    filled_exits = trade.select_filled_orders(trade.exit_side)
-    count_of_entries = trade.nr_of_successful_entries
-    count_of_exits = trade.nr_of_successful_exits
+    filled_orders, filled_entries, filled_exits = self.filled_order_snapshot(trade)
+    count_of_entries = len(filled_entries)
+    count_of_exits = len(filled_exits)
 
     if count_of_entries == 0:
       return None
@@ -51382,11 +51386,9 @@ class NostalgiaForInfinityX7(IStrategy):
     if trade.has_open_orders:
       return None
 
-    filled_orders = trade.select_filled_orders()
-    filled_entries = trade.select_filled_orders(trade.entry_side)
-    filled_exits = trade.select_filled_orders(trade.exit_side)
-    count_of_entries = trade.nr_of_successful_entries
-    count_of_exits = trade.nr_of_successful_exits
+    filled_orders, filled_entries, filled_exits = self.filled_order_snapshot(trade)
+    count_of_entries = len(filled_entries)
+    count_of_exits = len(filled_exits)
 
     if count_of_entries == 0:
       return None
@@ -51569,11 +51571,9 @@ class NostalgiaForInfinityX7(IStrategy):
     if trade.has_open_orders:
       return None
 
-    filled_orders = trade.select_filled_orders()
-    filled_entries = trade.select_filled_orders(trade.entry_side)
-    filled_exits = trade.select_filled_orders(trade.exit_side)
-    count_of_entries = trade.nr_of_successful_entries
-    count_of_exits = trade.nr_of_successful_exits
+    filled_orders, filled_entries, filled_exits = self.filled_order_snapshot(trade)
+    count_of_entries = len(filled_entries)
+    count_of_exits = len(filled_exits)
 
     if count_of_entries == 0:
       return None
@@ -69836,11 +69836,8 @@ class NostalgiaForInfinityX7(IStrategy):
     if trade.has_open_orders:
       return None
 
-    filled_orders = trade.select_filled_orders()
-    filled_entries = trade.select_filled_orders(trade.entry_side)
-    filled_exits = trade.select_filled_orders(trade.exit_side)
-    count_of_entries = trade.nr_of_successful_entries
-    count_of_exits = trade.nr_of_successful_exits
+    filled_orders, filled_entries, filled_exits = self.filled_order_snapshot(trade)
+    count_of_exits = len(filled_exits)
 
     exit_rate = current_rate
     if self.dp.runmode.value in ("live", "dry_run"):
@@ -72228,11 +72225,8 @@ class NostalgiaForInfinityX7(IStrategy):
     if trade.has_open_orders:
       return None
 
-    filled_orders = trade.select_filled_orders()
-    filled_entries = trade.select_filled_orders(trade.entry_side)
-    filled_exits = trade.select_filled_orders(trade.exit_side)
-    count_of_entries = trade.nr_of_successful_entries
-    count_of_exits = trade.nr_of_successful_exits
+    filled_orders, filled_entries, filled_exits = self.filled_order_snapshot(trade)
+    count_of_exits = len(filled_exits)
 
     exit_rate = current_rate
     if self.dp.runmode.value in ("live", "dry_run"):
@@ -73850,11 +73844,9 @@ class NostalgiaForInfinityX7(IStrategy):
     if trade.has_open_orders:
       return None
 
-    filled_orders = trade.select_filled_orders()
-    filled_entries = trade.select_filled_orders(trade.entry_side)
-    filled_exits = trade.select_filled_orders(trade.exit_side)
-    count_of_entries = trade.nr_of_successful_entries
-    count_of_exits = trade.nr_of_successful_exits
+    filled_orders, filled_entries, filled_exits = self.filled_order_snapshot(trade)
+    count_of_entries = len(filled_entries)
+    count_of_exits = len(filled_exits)
 
     if count_of_entries == 0:
       return None
@@ -77460,11 +77452,9 @@ class NostalgiaForInfinityX7(IStrategy):
     if trade.has_open_orders:
       return None
 
-    filled_orders = trade.select_filled_orders()
-    filled_entries = trade.select_filled_orders(trade.entry_side)
-    filled_exits = trade.select_filled_orders(trade.exit_side)
-    count_of_entries = trade.nr_of_successful_entries
-    count_of_exits = trade.nr_of_successful_exits
+    filled_orders, filled_entries, filled_exits = self.filled_order_snapshot(trade)
+    count_of_entries = len(filled_entries)
+    count_of_exits = len(filled_exits)
 
     if count_of_entries == 0:
       return None
@@ -77637,11 +77627,9 @@ class NostalgiaForInfinityX7(IStrategy):
     if trade.has_open_orders:
       return None
 
-    filled_orders = trade.select_filled_orders()
-    filled_entries = trade.select_filled_orders(trade.entry_side)
-    filled_exits = trade.select_filled_orders(trade.exit_side)
-    count_of_entries = trade.nr_of_successful_entries
-    count_of_exits = trade.nr_of_successful_exits
+    filled_orders, filled_entries, filled_exits = self.filled_order_snapshot(trade)
+    count_of_entries = len(filled_entries)
+    count_of_exits = len(filled_exits)
 
     if count_of_entries == 0:
       return None
