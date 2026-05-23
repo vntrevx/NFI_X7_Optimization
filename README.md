@@ -31,13 +31,15 @@ Latest rebase check:
 ### Open Collaboration
 
 <p align="center">
-  <img alt="Discord DM: ho_00001" src="https://img.shields.io/static/v1?label=Discord&message=ho_00001&color=5865F2&style=for-the-badge&logo=discord&logoColor=white">
+  <a href="https://discord.com/channels/@me">
+    <img alt="Discord DM: ho_00001" src="https://img.shields.io/static/v1?label=Discord&message=ho_00001&color=5865F2&style=for-the-badge&logo=discord&logoColor=white">
+  </a>
 </p>
 
 <p align="center">
   <strong>Testing <code>TestX7</code> on another setup? Reviewing the optimization path?</strong><br>
   Feedback, parity checks, and hardening help are welcome.<br>
-  Send me a Discord DM: <code>ho_00001</code>
+  Send me a Discord DM: <a href="https://discord.com/channels/@me"><code>ho_00001</code></a>
 </p>
 
 ### How To Try TestX7
@@ -270,13 +272,15 @@ Backtest 관련 추가 문서:
 ### 같이 검증해보고 싶다면
 
 <p align="center">
-  <img alt="Discord DM: ho_00001" src="https://img.shields.io/static/v1?label=Discord&message=ho_00001&color=5865F2&style=for-the-badge&logo=discord&logoColor=white">
+  <a href="https://discord.com/channels/@me">
+    <img alt="Discord DM: ho_00001" src="https://img.shields.io/static/v1?label=Discord&message=ho_00001&color=5865F2&style=for-the-badge&logo=discord&logoColor=white">
+  </a>
 </p>
 
 <p align="center">
   <strong><code>TestX7</code>를 다른 환경에서 테스트해보거나 최적화 경로를 리뷰해보고 싶다면</strong><br>
   parity 확인, 다른 환경 검증, hardening 도움 모두 환영합니다.<br>
-  Discord DM: <code>ho_00001</code>
+  Discord DM: <a href="https://discord.com/channels/@me"><code>ho_00001</code></a>
 </p>
 
 ### 한 줄 요약
