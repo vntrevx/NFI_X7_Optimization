@@ -40,6 +40,8 @@ That boundary is documented in `docs/upstream-baseline-note.md`.
 
 ## Folder Contents
 
+- `INSTALL.md` - direct install guide
+- `INSTALL_KO.md` - Korean direct install guide
 - `configs/candidate-config.example.json` - selected candidate config
 - `configs/paper-overlay.example.json` - fixed paper/tiny-canary overlay
 - `docs/final-report.md` - public final summary
@@ -47,8 +49,16 @@ That boundary is documented in `docs/upstream-baseline-note.md`.
 - `docs/effectiveness-retrospective.md` - what the tuning work improved
 - `docs/upstream-baseline-note.md` - upstream version and local-diff note
 - `evidence/local-status.json` - machine-readable local status snapshot
+- `release/testx7-v174109-rescue-short641-install-20260523.tar.gz` - sanitized
+  install bundle with the checked v17.4.109 strategy/config files
 
 ## Reproducibility Notes
+
+For direct installation, start with:
+
+```text
+INSTALL.md
+```
 
 The original local verifier command was:
 

@@ -41,6 +41,8 @@ upstream과 완전히 byte-identical 하지는 않았습니다.
 
 ## 포함 내용
 
+- `INSTALL.md` - 직접 설치 가이드
+- `INSTALL_KO.md` - 한국어 직접 설치 가이드
 - `configs/candidate-config.example.json` - 선택된 후보 config
 - `configs/paper-overlay.example.json` - paper/tiny-canary overlay
 - `docs/final-report.md` - 공개용 최종 요약
@@ -48,3 +50,5 @@ upstream과 완전히 byte-identical 하지는 않았습니다.
 - `docs/effectiveness-retrospective.md` - 이번 작업의 효과 정리
 - `docs/upstream-baseline-note.md` - upstream 버전 및 로컬 차이
 - `evidence/local-status.json` - 로컬 상태 JSON 스냅샷
+- `release/testx7-v174109-rescue-short641-install-20260523.tar.gz` - 검증된
+  v17.4.109 전략/설정 파일만 담은 sanitized 설치 번들
