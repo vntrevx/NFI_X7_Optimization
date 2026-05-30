@@ -23,7 +23,9 @@ docker_cpus="$(
     | awk '/^[0-9]+$/ { value = $0 } END { if (value != "") print value; else exit 1 }'
 )"
 if (( docker_cpus >= 2 )); then
-  default_workers=$((docker_cpus - 1))
+  # Stable process workers pin numeric libraries to one thread, so full logical CPU fanout
+  # gives the 80-pair gate more headroom than physical-core-only sizing.
+  default_workers=$docker_cpus
 else
   default_workers=1
 fi

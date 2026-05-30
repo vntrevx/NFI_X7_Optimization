@@ -5,6 +5,7 @@ from __future__ import annotations
 import atexit
 from concurrent.futures import ProcessPoolExecutor
 from concurrent.futures import ThreadPoolExecutor, as_completed
+import gc
 import importlib
 import logging
 import multiprocessing
@@ -22,7 +23,7 @@ from freqtrade.persistence import Trade
 from freqtrade.strategy.strategy_validation import StrategyResultValidator
 from pandas import DataFrame
 
-from test_x7_modules.cpu import recommended_indicator_cores, recommended_process_workers
+from test_x7_modules.cpu import recommended_indicator_cores, recommended_process_workers, recommended_stable_process_workers
 
 log = logging.getLogger(__name__)
 _MIN_CALLBACK_RESULT_ROWS = 6
@@ -131,6 +132,7 @@ def _init_process_worker(
   global _PROCESS_STRATEGY, _PROCESS_RUNMODE
 
   _test_x7_apply_numeric_thread_limit(config)
+  gc.disable()
   if strategy_dir not in sys.path:
     sys.path.insert(0, strategy_dir)
   module = importlib.import_module(strategy_module)
@@ -284,7 +286,7 @@ class TestX7ParallelAnalyzeMixin:
     env_workers = _positive_int(os.getenv(self.test_x7_stable_process_analyze_workers_env))
     config_workers = self.config.get("test_x7_stable_process_analyze_workers", 1)
     if isinstance(config_workers, str) and config_workers.strip().lower() == "auto":
-      config_workers = recommended_process_workers(self.test_x7_stable_process_analyze_workers_env)
+      config_workers = recommended_stable_process_workers(self.test_x7_stable_process_analyze_workers_env)
     workers = env_workers if env_workers is not None else (_positive_int(config_workers) or 1)
     return max(1, min(pair_count, workers))
 

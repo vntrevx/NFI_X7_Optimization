@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import logging
 import os
+import time
 from typing import Any
 
 log = logging.getLogger(__name__)
@@ -44,13 +45,7 @@ class TestX7BtcInformativeCacheMixin:
         last_date = last_date.isoformat()
     return (pair, timeframe, len(dataframe), last_date, tuple(str(column) for column in dataframe.columns))
 
-  def _test_x7_build_btc_informative(self, btc_info_pair: str, btc_info_timeframe: str):
-    dataframe = self.dp.get_pair_dataframe(btc_info_pair, btc_info_timeframe)
-    informative = dataframe.copy()
-    informative.rename(columns=lambda s: f"btc_{s}" if s != "date" else s, inplace=True)
-    return dataframe, informative
-
-  def _test_x7_btc_informative(self, btc_info_pair: str, btc_info_timeframe: str):
+  def _btc_info_indicators(self, btc_info_pair: str, btc_info_timeframe: str, metadata: dict):
     dataframe = self.dp.get_pair_dataframe(btc_info_pair, btc_info_timeframe)
     key = self._test_x7_btc_cache_key(btc_info_pair, btc_info_timeframe, dataframe)
     store = self._test_x7_btc_cache_store()
@@ -58,23 +53,12 @@ class TestX7BtcInformativeCacheMixin:
     if self._test_x7_btc_cache_enabled() and key in store:
       return store[key]
 
+    tik = time.perf_counter()
     informative = dataframe.copy()
-    informative.rename(columns=lambda s: f"btc_{s}" if s != "date" else s, inplace=True)
+    informative.rename(columns=lambda column: f"btc_{column}" if column != "date" else column, inplace=True)
+    tok = time.perf_counter()
+    log.debug("[%s] btc_info_%s_indicators took: %.4f seconds.", metadata["pair"], btc_info_timeframe, tok - tik)
+
     if self._test_x7_btc_cache_enabled():
       store[key] = informative
     return informative
-
-  def btc_info_1d_indicators(self, btc_info_pair, btc_info_timeframe, metadata: dict):
-    return self._test_x7_btc_informative(btc_info_pair, btc_info_timeframe)
-
-  def btc_info_4h_indicators(self, btc_info_pair, btc_info_timeframe, metadata: dict):
-    return self._test_x7_btc_informative(btc_info_pair, btc_info_timeframe)
-
-  def btc_info_1h_indicators(self, btc_info_pair, btc_info_timeframe, metadata: dict):
-    return self._test_x7_btc_informative(btc_info_pair, btc_info_timeframe)
-
-  def btc_info_15m_indicators(self, btc_info_pair, btc_info_timeframe, metadata: dict):
-    return self._test_x7_btc_informative(btc_info_pair, btc_info_timeframe)
-
-  def btc_info_5m_indicators(self, btc_info_pair, btc_info_timeframe, metadata: dict):
-    return self._test_x7_btc_informative(btc_info_pair, btc_info_timeframe)

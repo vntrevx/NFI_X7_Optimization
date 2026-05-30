@@ -99,3 +99,11 @@ def recommended_process_workers(env_var: str = "TEST_X7_PROCESS_WORKERS") -> int
   if explicit is not None:
     return min(explicit, max(1, topology.logical_cpus))
   return topology.recommended_workers
+
+
+def recommended_stable_process_workers(env_var: str = "TEST_X7_STABLE_PROCESS_WORKERS") -> int:
+  explicit = _positive_int(os.getenv(env_var))
+  topology = detect_cpu_topology()
+  if explicit is not None:
+    return min(explicit, max(1, topology.logical_cpus))
+  return max(1, topology.logical_cpus)
