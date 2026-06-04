@@ -30,3 +30,4 @@ __pycache__/
 .ruff_cache/
 .cache/
 .DS_Store
+.codegraph/

@@ -206,6 +206,7 @@ def _run_process_chunk(payload: dict[str, Any]) -> list[tuple[str, DataFrame]]:
     if result_tail_rows > 0 and len(analyzed) > result_tail_rows:
       analyzed = analyzed.tail(result_tail_rows).copy(deep=False)
     results.append((pair, analyzed))
+  gc.collect()
   return results
 
 
@@ -237,6 +238,8 @@ def _stable_process_worker_loop(
       response_queue.put((loop_id, worker_index, result, None))
     except Exception:
       response_queue.put((loop_id, worker_index, None, traceback.format_exc()))
+
+    gc.collect()
 
 
 class TestX7ParallelAnalyzeMixin:
