@@ -39,14 +39,14 @@ or
 
 <p align="center">
   <a href="https://discord.com/channels/@me">
-    <img alt="Discord DM: vntrevx" src="https://img.shields.io/static/v1?label=Discord&message=ho_00001&color=5865F2&style=for-the-badge&logo=discord&logoColor=white">
+    <img alt="Discord DM: vntrevx" src="https://img.shields.io/static/v1?label=Discord&message=vntrevx&color=5865F2&style=for-the-badge&logo=discord&logoColor=white">
   </a>
 </p>
 
 <p align="center">
   <strong>Testing <code>TestX7</code> on another setup? Reviewing the optimization path?</strong><br>
   Feedback, parity checks, and hardening help are welcome.<br>
-  Send me a Discord DM: <a href="https://discord.com/channels/@me"><code>ho_00001</code></a>
+  Send me a Discord DM: <a href="https://discord.com/channels/@me"><code>vntrevx</code></a>
 </p>
 
 ### How To Try TestX7
