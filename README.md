@@ -39,7 +39,7 @@ or
 
 <p align="center">
   <a href="https://discord.com/channels/@me">
-    <img alt="Discord DM: ho_00001" src="https://img.shields.io/static/v1?label=Discord&message=ho_00001&color=5865F2&style=for-the-badge&logo=discord&logoColor=white">
+    <img alt="Discord DM: vntrevx" src="https://img.shields.io/static/v1?label=Discord&message=ho_00001&color=5865F2&style=for-the-badge&logo=discord&logoColor=white">
   </a>
 </p>
 
