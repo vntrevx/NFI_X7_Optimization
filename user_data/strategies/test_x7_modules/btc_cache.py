@@ -1,8 +1,11 @@
 """BTC informative dataframe cache for TestX7.
 
-The cache is deliberately conservative: the key includes pair, timeframe,
-row count, last candle date, and the source column layout. If any of those
-change, TestX7 misses the cache and rebuilds the informative dataframe.
+The cache keeps a single slot per (pair, timeframe). Each slot stores the
+latest dataframe together with a signature (row count, last candle date,
+and column layout). A new candle changes the signature, so TestX7 rebuilds
+the informative dataframe and overwrites the slot instead of accumulating a
+new entry. This bounds memory to the number of (pair, timeframe) slots while
+still serving repeated requests for the same candle state from cache.
 """
 
 from __future__ import annotations
@@ -29,29 +32,33 @@ class TestX7BtcInformativeCacheMixin:
     config_value = config.get("test_x7_btc_cache_enabled", True)
     return bool(config_value) and not _disabled_from_env(self.test_x7_btc_cache_disable_env)
 
-  def _test_x7_btc_cache_store(self) -> dict[tuple[Any, ...], Any]:
+  def _test_x7_btc_cache_store(self) -> dict[tuple[str, str], tuple[tuple[Any, ...], Any]]:
     store = getattr(self, "_test_x7_btc_cache", None)
     if store is None:
       store = {}
       self._test_x7_btc_cache = store
     return store
 
-  def _test_x7_btc_cache_key(self, pair: str, timeframe: str, dataframe) -> tuple[Any, ...]:
+  def _test_x7_btc_cache_signature(self, dataframe) -> tuple[Any, ...]:
     if dataframe.empty:
       last_date = None
     else:
       last_date = dataframe.iloc[-1].get("date")
       if hasattr(last_date, "isoformat"):
         last_date = last_date.isoformat()
-    return (pair, timeframe, len(dataframe), last_date, tuple(str(column) for column in dataframe.columns))
+    return (len(dataframe), last_date, tuple(str(column) for column in dataframe.columns))
 
   def _btc_info_indicators(self, btc_info_pair: str, btc_info_timeframe: str, metadata: dict):
     dataframe = self.dp.get_pair_dataframe(btc_info_pair, btc_info_timeframe)
-    key = self._test_x7_btc_cache_key(btc_info_pair, btc_info_timeframe, dataframe)
+    enabled = self._test_x7_btc_cache_enabled()
+    slot = (btc_info_pair, btc_info_timeframe)
+    signature = self._test_x7_btc_cache_signature(dataframe)
     store = self._test_x7_btc_cache_store()
 
-    if self._test_x7_btc_cache_enabled() and key in store:
-      return store[key]
+    if enabled:
+      cached = store.get(slot)
+      if cached is not None and cached[0] == signature:
+        return cached[1]
 
     tik = time.perf_counter()
     informative = dataframe.copy()
@@ -59,6 +66,6 @@ class TestX7BtcInformativeCacheMixin:
     tok = time.perf_counter()
     log.debug("[%s] btc_info_%s_indicators took: %.4f seconds.", metadata["pair"], btc_info_timeframe, tok - tik)
 
-    if self._test_x7_btc_cache_enabled():
-      store[key] = informative
+    if enabled:
+      store[slot] = (signature, informative)
     return informative

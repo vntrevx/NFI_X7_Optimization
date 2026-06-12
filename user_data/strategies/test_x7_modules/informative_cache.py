@@ -1,4 +1,11 @@
-"""Conservative informative dataframe cache for TestX7."""
+"""Conservative informative dataframe cache for TestX7.
+
+Each (pair, timeframe) keeps a single slot holding the latest informative
+dataframe and a signature of its source candle state (row count, last candle
+date, column layout). A new candle changes the signature, so the slot is
+overwritten rather than accumulated. Memory stays bounded by the number of
+(pair, timeframe) slots.
+"""
 
 from __future__ import annotations
 
@@ -22,14 +29,14 @@ class TestX7InformativeCacheMixin:
     config_value = config.get("test_x7_informative_cache_enabled", True)
     return bool(config_value) and not _disabled_from_env(self.test_x7_informative_cache_env)
 
-  def _test_x7_informative_cache_store(self) -> dict[tuple[Any, ...], Any]:
+  def _test_x7_informative_cache_store(self) -> dict[tuple[str, str], tuple[tuple[Any, ...], Any]]:
     store = getattr(self, "_test_x7_informative_cache", None)
     if store is None:
       store = {}
       self._test_x7_informative_cache = store
     return store
 
-  def _test_x7_informative_cache_key(self, pair: str, timeframe: str) -> tuple[Any, ...]:
+  def _test_x7_informative_cache_signature(self, pair: str, timeframe: str) -> tuple[Any, ...]:
     dataframe = self.dp.get_pair_dataframe(pair=pair, timeframe=timeframe)
     if dataframe.empty:
       last_date = None
@@ -37,18 +44,20 @@ class TestX7InformativeCacheMixin:
       last_date = dataframe.iloc[-1].get("date")
       if hasattr(last_date, "isoformat"):
         last_date = last_date.isoformat()
-    return (pair, timeframe, len(dataframe), last_date, tuple(str(column) for column in dataframe.columns))
+    return (len(dataframe), last_date, tuple(str(column) for column in dataframe.columns))
 
   def info_switcher(self, metadata: dict, info_timeframe):
     if not self._test_x7_informative_cache_enabled():
       return super().info_switcher(metadata, info_timeframe)
 
-    key = self._test_x7_informative_cache_key(metadata["pair"], info_timeframe)
+    pair = metadata["pair"]
+    slot = (pair, info_timeframe)
+    signature = self._test_x7_informative_cache_signature(pair, info_timeframe)
     store = self._test_x7_informative_cache_store()
-    cached = store.get(key)
-    if cached is not None:
-      return cached
+    cached = store.get(slot)
+    if cached is not None and cached[0] == signature:
+      return cached[1]
 
     informative = super().info_switcher(metadata, info_timeframe)
-    store[key] = informative
+    store[slot] = (signature, informative)
     return informative
